@@ -12,14 +12,15 @@ namespace BloodBowlPOC
     /// </summary>
     public partial class MainWindow : Window
     {
-        public const double CellWidth = 32;
-        public const double CellHeight = 24;
-        public const int SizeX = 16;
-        public const int SizeY = 24;
+        public static readonly double CellWidth = 32;
+        public static readonly double CellHeight = 24;
+        public static readonly int SizeX = 16;
+        public static readonly int SizeY = 24;
+
         public TextBlock[,] Texts;
         public Border[,] Cells;
 
-        public Board Board = new Board(SizeX, SizeY);
+        public Board Board;
 
         public MainWindow()
         {
@@ -59,6 +60,8 @@ namespace BloodBowlPOC
 
             MaxBouncesComboBox.SelectedIndex = 2;
             MaxDistanceComboBox.SelectedIndex = 2;
+
+            Board = new Board(SizeX, SizeY);
         }
 
         private void CellOnMouseUp(object sender, MouseButtonEventArgs mouseButtonEventArgs)

@@ -5,10 +5,10 @@ namespace BloodBowlPOC.Boards
 {
     public class Board
     {
-        public static int DirectionsCount = 8;
-        //                                  N, NE,  E, SE,  S, SW,  W, NW
-        public static int[] DirectionsX = {0, 1, 1, 1, 0, -1, -1, -1};
-        public static int[] DirectionsY = {-1, -1, 0, 1, 1, 1, 0, -1};
+        public static readonly int DirectionsCount = 8;
+        //                                            N, NE,  E, SE,  S, SW,  W, NW
+        public static readonly int[] DirectionsX = {  0,  1,  1,  1,  0, -1, -1, -1};
+        public static readonly int[] DirectionsY = { -1, -1,  0,  1,  1,  1,  0, -1};
 
         public int SizeX { get; private set; }
         public int SizeY { get; private set; }

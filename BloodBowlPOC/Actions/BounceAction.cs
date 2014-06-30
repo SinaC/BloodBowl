@@ -20,7 +20,7 @@ namespace BloodBowlPOC.Actions
         {
             List<ActionBase> actions = new List<ActionBase>();
             //
-            //System.Diagnostics.Debug.WriteLine("Dequeue Action:{0},{1} -> {2},{3} | {4} | {5}", FromX, FromY, toX, toY, BounceLeft, Probability);
+            //System.Diagnostics.Debug.WriteLine("Dequeue Action:{0},{1} | {4} | {5}", X, Y, BounceLeft, Probability);
 
             if (X < 0 || X >= board.SizeX || Y < 0 || Y >= board.SizeY)
             {
