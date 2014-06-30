@@ -49,15 +49,15 @@ namespace BloodBowlPOC
                             Width = CellWidth,
                         };
                     border.MouseUp += CellOnMouseUp;
-                    Canvas.SetTop(border, y * CellHeight);
-                    Canvas.SetLeft(border, x * CellWidth);
+                    Canvas.SetTop(border, y*CellHeight);
+                    Canvas.SetLeft(border, x*CellWidth);
                     GridCanvas.Children.Add(border);
                     Cells[x, y] = border;
                 }
             GridCanvas.Width = CellWidth*SizeX;
-            GridCanvas.Height = CellHeight * SizeY;
+            GridCanvas.Height = CellHeight*SizeY;
 
-            IterationComboBox.SelectedIndex = 2;
+            MaxBouncesComboBox.SelectedIndex = 2;
             MaxDistanceComboBox.SelectedIndex = 2;
         }
 
@@ -68,16 +68,16 @@ namespace BloodBowlPOC
             {
                 // Get cell
                 Point relativePoint = border.TransformToAncestor(GridCanvas).Transform(new Point(0, 0));
-                int cellX = (int)(relativePoint.X / CellWidth);
-                int cellY = (int)(relativePoint.Y / CellHeight);
+                int cellX = (int) (relativePoint.X/CellWidth);
+                int cellY = (int) (relativePoint.Y/CellHeight);
                 if (cellX >= 0 && cellX < SizeX && cellY >= 0 && cellY < SizeY)
                 {
                     // Compute and display
                     Board.Reset();
                     ClearGrid();
                     int maxDistance = int.Parse(MaxDistanceComboBox.SelectionBoxItem.ToString());
-                    int occcurrence = int.Parse(IterationComboBox.SelectionBoxItem.ToString());
-                    Board.ComputeBounceProbabilities(cellX, cellY, maxDistance, occcurrence);
+                    int maxBounces = int.Parse(MaxBouncesComboBox.SelectionBoxItem.ToString());
+                    Board.ComputeBounceProbabilities(cellX, cellY, maxDistance, maxBounces);
                     DisplayProbabilities(Board);
                     Cells[cellX, cellY].BorderBrush = new SolidColorBrush(Colors.White);
                 }
@@ -116,7 +116,7 @@ namespace BloodBowlPOC
                     }
                 }
             System.Diagnostics.Debug.WriteLine("Sum:{0} Min:{1} Max:{2}", sum, min, max);
-            Status.Text = String.Format("Sum:{0:0.####} Min:{1:0.####} Max:{2:0.####}", sum * 100, min * 100, max * 100);
+            Status.Text = String.Format("Sum:{0:0.####} Min:{1:0.####} Max:{2:0.####}", sum*100, min*100, max*100);
             // Display
             bool uniqueValue = Math.Abs(min - max) < 0.0000001; // if min == max -> display in green
             for (int y = 0; y < SizeY; y++)
@@ -125,15 +125,15 @@ namespace BloodBowlPOC
                     double probability = board.Probabilities[x, y];
                     if (probability > 0)
                     {
-                        Texts[x, y].Text = 100.0 * probability < 0.01 ? "<0.01" : String.Format("{0:0.##}", 100.0 * probability);
-                        Texts[x, y].ToolTip = String.Format("{0}", 100.0 * probability);
+                        Texts[x, y].Text = 100.0*probability < 0.01 ? "<0.01" : String.Format("{0:0.##}", 100.0*probability);
+                        Texts[x, y].ToolTip = String.Format("{0}", 100.0*probability);
                         if (uniqueValue)
                             Cells[x, y].Background = new SolidColorBrush(Color.FromRgb(0, 0xFF, 0));
                         else
                         {
-                            double red = 255 - (probability - min) * (255 - 0) / (max - min);
-                            double green = 0 + (probability - min) * (255 - 0) / (max - min);
-                            Cells[x, y].Background = new SolidColorBrush(Color.FromRgb((byte)red, (byte)green, 0));
+                            double red = 255 - (probability - min)*(255 - 0)/(max - min);
+                            double green = 0 + (probability - min)*(255 - 0)/(max - min);
+                            Cells[x, y].Background = new SolidColorBrush(Color.FromRgb((byte) red, (byte) green, 0));
                         }
                     }
                 }

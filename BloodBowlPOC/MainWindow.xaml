@@ -9,15 +9,15 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <StackPanel Orientation="Horizontal">
-            <TextBlock Text="Iterations:"/>
-            <ComboBox x:Name="IterationComboBox" Width="40">
+            <TextBlock Text="Max bounces:"/>
+            <ComboBox x:Name="MaxBouncesComboBox" Width="40">
                 <ComboBoxItem>1</ComboBoxItem>
                 <ComboBoxItem>2</ComboBoxItem>
                 <ComboBoxItem>3</ComboBoxItem>
                 <ComboBoxItem>4</ComboBoxItem>
                 <ComboBoxItem>5</ComboBoxItem>
             </ComboBox>
-            <TextBlock Text="Max Distance:"/>
+            <TextBlock Text="Max distance:"/>
             <ComboBox x:Name="MaxDistanceComboBox" Width="40">
                 <ComboBoxItem>1</ComboBoxItem>
                 <ComboBoxItem>2</ComboBoxItem>

@@ -5,9 +5,10 @@ namespace BloodBowlPOC.Boards
 {
     public class Board
     {
+        public static int DirectionsCount = 8;
         //                                  N, NE,  E, SE,  S, SW,  W, NW
-        public static int[] DirectionsX = { 0, 1, 1, 1, 0, -1, -1, -1 };
-        public static int[] DirectionsY = { -1, -1, 0, 1, 1, 1, 0, -1 };
+        public static int[] DirectionsX = {0, 1, 1, 1, 0, -1, -1, -1};
+        public static int[] DirectionsY = {-1, -1, 0, 1, 1, 1, 0, -1};
 
         public int SizeX { get; private set; }
         public int SizeY { get; private set; }
@@ -27,20 +28,16 @@ namespace BloodBowlPOC.Boards
                     Probabilities[x, y] = 0;
         }
 
-        public void ComputeBounceProbabilities(int fromX, int fromY, int maxDistance, int occcurrence)
+        public void ComputeBounceProbabilities(int x, int y, int maxDistance, int maxBounces)
         {
             // Throw the ball
             BounceAction startAction = new BounceAction
-            {
-                FromX = fromX,
-                FromY = fromY,
-                DirectionX = 0,
-                DirectionY = 0,
-                Distance = 0,
-                MaxDistance = maxDistance,
-                Occurrence = occcurrence,
-                Probability = 1,
-            };
+                {
+                    X = x,
+                    Y = y,
+                    MaxDistance = maxDistance,
+                    BounceLeft = maxBounces,
+                };
             Queue<ActionBase> actions = new Queue<ActionBase>();
             actions.Enqueue(startAction);
 
