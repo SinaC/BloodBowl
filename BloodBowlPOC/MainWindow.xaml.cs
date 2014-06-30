@@ -1,18 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using BloodBowlPOC.Boards;
 
 namespace BloodBowlPOC
 {
@@ -21,113 +12,131 @@ namespace BloodBowlPOC
     /// </summary>
     public partial class MainWindow : Window
     {
-        public const int Size = 10;
+        public const double CellWidth = 32;
+        public const double CellHeight = 24;
+        public const int SizeX = 16;
+        public const int SizeY = 24;
         public TextBlock[,] Texts;
+        public Border[,] Cells;
+
+        public Board Board = new Board(SizeX, SizeY);
 
         public MainWindow()
         {
             InitializeComponent();
 
-            Texts = new TextBlock[Size,Size];
+            Texts = new TextBlock[SizeX,SizeY];
+            Cells = new Border[SizeX,SizeY];
 
-            for(int i = 0; i < Size; i++)
-                Grid.ColumnDefinitions.Add(new ColumnDefinition
-                {
-                    Width = new GridLength(40)
-                });
-            for (int i = 0; i < Size; i++)
-                Grid.RowDefinitions.Add(new RowDefinition
-                {
-                    Height = new GridLength(40)
-                });
-            for(int y = 0; y < Size; y++)
-                for (int x = 0; x < Size; x++)
+            for (int y = 0; y < SizeY; y++)
+                for (int x = 0; x < SizeX; x++)
                 {
                     TextBlock txt = new TextBlock
-                    {
-                        Text = "0",
-                        HorizontalAlignment = HorizontalAlignment.Center
-                    };
-                    Grid.SetColumn(txt, y);
-                    Grid.SetRow(txt, x);
-                    Grid.Children.Add(txt);
-                    Texts[x, y] = txt;
-                }
-
-            Test();
-        }
-
-        public class MoveAction
-        {
-            public int FromX { get; set; }
-            public int FromY { get; set; }
-            public int DirectionX { get; set; }
-            public int DirectionY { get; set; }
-            public int Occurence { get; set; }
-            // Distance is harcoded to 1 (should be 1 -> 6 with same probabilities)
-            // Direction is implicitly 1/4 in each direction 0: up, 1: right, 2: down, 3: left
-            public double Probability { get; set; }
-        }
-
-        public static int[] DirectionsX = {0, 1, 0, -1};
-        public static int[] DirectionsY = {-1, 0, 1, 0};
-
-        public void Test()
-        {
-            double[,] board = new double[Size, Size];
-            
-            //
-            Queue<MoveAction> actions = new Queue<MoveAction>();
-            //
-            MoveAction startAction = new MoveAction
-            {
-                FromX = Size/2,
-                FromY = Size/2,
-                DirectionX = 0,
-                DirectionY = 0,
-                Occurence = 3,
-                Probability = 1,
-            };
-            actions.Enqueue(startAction);
-            //
-            while (actions.Count > 0)
-            {
-                MoveAction action = actions.Dequeue();
-
-                //
-                int toX = action.FromX + action.DirectionX;
-                int toY = action.FromY + action.DirectionY;
-
-                //
-                System.Diagnostics.Debug.WriteLine("Dequeue Action:{0},{1} -> {2},{3} | {4} | {5}", action.FromX, action.FromY, toX, toY, action.Occurence, action.Probability);
-
-                // Create a new action for each direction if occurence > 0
-                if (action.Occurence > 0)
-                {
-                    for (int i = 0; i < 4; i++)
-                    {
-                        MoveAction subAction = new MoveAction
                         {
-                            FromX = toX,
-                            FromY = toY,
-                            DirectionX = DirectionsX[i],
-                            DirectionY = DirectionsY[i],
-                            Occurence = action.Occurence - 1,
-                            Probability = action.Probability/4.0
+                            Text = String.Empty,
+                            HorizontalAlignment = HorizontalAlignment.Center,
+                            Height = CellHeight,
+                            Width = CellWidth,
                         };
-                        actions.Enqueue(subAction);
+                    Texts[x, y] = txt;
+
+                    Border border = new Border
+                        {
+                            BorderBrush = new SolidColorBrush(Colors.Black),
+                            BorderThickness = new Thickness(1),
+                            Child = txt,
+                            Height = CellHeight,
+                            Width = CellWidth,
+                        };
+                    border.MouseUp += CellOnMouseUp;
+                    Canvas.SetTop(border, y * CellHeight);
+                    Canvas.SetLeft(border, x * CellWidth);
+                    GridCanvas.Children.Add(border);
+                    Cells[x, y] = border;
+                }
+            GridCanvas.Width = CellWidth*SizeX;
+            GridCanvas.Height = CellHeight * SizeY;
+
+            IterationComboBox.SelectedIndex = 2;
+            MaxDistanceComboBox.SelectedIndex = 2;
+        }
+
+        private void CellOnMouseUp(object sender, MouseButtonEventArgs mouseButtonEventArgs)
+        {
+            Border border = (sender as Border);
+            if (border != null)
+            {
+                // Get cell
+                Point relativePoint = border.TransformToAncestor(GridCanvas).Transform(new Point(0, 0));
+                int cellX = (int)(relativePoint.X / CellWidth);
+                int cellY = (int)(relativePoint.Y / CellHeight);
+                if (cellX >= 0 && cellX < SizeX && cellY >= 0 && cellY < SizeY)
+                {
+                    // Compute and display
+                    Board.Reset();
+                    ClearGrid();
+                    int maxDistance = int.Parse(MaxDistanceComboBox.SelectionBoxItem.ToString());
+                    int occcurrence = int.Parse(IterationComboBox.SelectionBoxItem.ToString());
+                    Board.ComputeBounceProbabilities(cellX, cellY, maxDistance, occcurrence);
+                    DisplayProbabilities(Board);
+                    Cells[cellX, cellY].BorderBrush = new SolidColorBrush(Colors.White);
+                }
+            }
+        }
+
+        private void ClearGrid()
+        {
+            for (int y = 0; y < SizeY; y++)
+                for (int x = 0; x < SizeX; x++)
+                {
+                    Texts[x, y].Text = null;
+                    Texts[x, y].ToolTip = null;
+                    Cells[x, y].Background = new SolidColorBrush(Colors.White);
+                    Cells[x, y].BorderBrush = new SolidColorBrush(Colors.Black);
+                }
+        }
+
+        private void DisplayProbabilities(Board board)
+        {
+            // Get min/max/sum
+            double min = Double.MaxValue;
+            double max = Double.MinValue;
+            double sum = 0;
+            for (int y = 0; y < board.SizeY; y++)
+                for (int x = 0; x < board.SizeX; x++)
+                {
+                    double probability = board.Probabilities[x, y];
+                    if (probability > 0)
+                    {
+                        sum += probability;
+                        if (probability < min)
+                            min = probability;
+                        if (probability > max)
+                            max = probability;
                     }
                 }
-                else
-                    board[toX, toY] += action.Probability;
-            }
-            //double sum = 0;
-            //for (int y = 0; y < Size; y++)
-            //    for (int x = 0; x < Size; x++)
-            //        sum += board[x, y];
-            for(int y = 0; y < Size; y++)
-                for (int x = 0; x < Size; x++)
-                    Texts[x, y].Text = String.Format("{0:0.####}",board[x, y]);
+            System.Diagnostics.Debug.WriteLine("Sum:{0} Min:{1} Max:{2}", sum, min, max);
+            Status.Text = String.Format("Sum:{0:0.####} Min:{1:0.####} Max:{2:0.####}", sum * 100, min * 100, max * 100);
+            // Display
+            bool uniqueValue = Math.Abs(min - max) < 0.0000001; // if min == max -> display in green
+            for (int y = 0; y < SizeY; y++)
+                for (int x = 0; x < SizeX; x++)
+                {
+                    double probability = board.Probabilities[x, y];
+                    if (probability > 0)
+                    {
+                        Texts[x, y].Text = 100.0 * probability < 0.01 ? "<0.01" : String.Format("{0:0.##}", 100.0 * probability);
+                        Texts[x, y].ToolTip = String.Format("{0}", 100.0 * probability);
+                        if (uniqueValue)
+                            Cells[x, y].Background = new SolidColorBrush(Color.FromRgb(0, 0xFF, 0));
+                        else
+                        {
+                            double red = 255 - (probability - min) * (255 - 0) / (max - min);
+                            double green = 0 + (probability - min) * (255 - 0) / (max - min);
+                            Cells[x, y].Background = new SolidColorBrush(Color.FromRgb((byte)red, (byte)green, 0));
+                        }
+                    }
+                }
         }
     }
 }
