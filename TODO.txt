@@ -1,0 +1,27 @@
+Definitions:
+Kick Action: Dice 8 -> dice 6 -> bounce action (1) /  Bounce Action (2)
+Pass Action: Get Accuracy -> Scatter Action (3)
+Throw-In Action: Dice 3 -> Dice 2d6 -> Bounce Ation(1)
+
+Next Developments:
+-Adapt most actions to provide an origin square so it can make sense for throwins
+
+-Adapt the PassAction so that it always makes 3 bounces and only then compute the throwin
+
+-Implement GetAccuracy, probably has to implement distance computing, make 2 squares selectable, throw to the second.
+
+-GUI make an action selector or a mode selector
+
+-GUI Allow selection of a zone via drag mouse, add all the probas within that zone
+
+-GUI Place Zone and ask to maximize the proba within that zone, probably needs another mode of working.
+
+-Handle player placements, give proba of reception per player
+-Handle Diving Catches and Failed Catches
+-Handle Diving Catch skill
+-Handle Interception Attemtps
+
+Ultimately handle player movement and tacklezones.
+Handle Blocks
+Make Playable with a bare reuleset
+Add Skills

@@ -1,28 +1,32 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using BloodBowlPOC.Boards;
+using BloodBowlPOC.Utils;
 
 namespace BloodBowlPOC.Actions
 {
+    // Current standing problem with the bounce class
+    // Bounce and scatter both use this class but utilmately the behave differently
+    // Bounces offer catch opportunities and are throw-in on the first OOB square
+    // while Scatter must finish all 3 repetitions before deciding a throwing and does
+    // not offer catch opportunities, only at the end of the 3 moves.
     public class BounceAction : ActionBase
     {
-        public int X { get; set; }
-        public int Y { get; set; }
-        public int MaxDistance { get; set; }
-        public int BounceLeft { get; set; }
-        public double Probability { get; private set; }
-
-        public BounceAction()
-        {
-            Probability = 1.0; // starts with 100%
-        }
+        public FieldCoordinate Coordinate { get;set;}
+        public int Occurrence { get; set; }
+        public double Probability { get; set; }
 
         public override List<ActionBase> Perform(Board board)
         {
-            List<ActionBase> actions = new List<ActionBase>();
-            //
-            //System.Diagnostics.Debug.WriteLine("Dequeue Action:{0},{1} | {4} | {5}", X, Y, BounceLeft, Probability);
+            List<ActionBase> subActions = new List<ActionBase>();
+            
 
-            if (X < 0 || X >= board.SizeX || Y < 0 || Y >= board.SizeY)
+            //System.Diagnostics.Debug.WriteLine("Dequeue Action:{0},{1} -> {2},{3} | {4} | {5}", FromX, FromY, toX, toY, Occurrence, Probability);
+
+            if (Coordinate.X < 0 || Coordinate.X >= board.SizeX || Coordinate.Y < 0 || Coordinate.Y >= board.SizeY)
             {
                 // Out of board
                 //System.Diagnostics.Debug.WriteLine("Out of board");
@@ -30,29 +34,26 @@ namespace BloodBowlPOC.Actions
             else
             {
                 // Create a new action for each direction/distance if occurrence > 0
-                if (BounceLeft > 0)
+                if (Occurrence > 0)
                 {
-                    for (int distance = 1; distance <= MaxDistance; distance++)
-                        for (int direction = 0; direction < Board.DirectionsCount; direction++)
+                        for (int direction = 0; direction < 8; direction++)
                         {
-                            int toX = X + Board.DirectionsX[direction]*distance;
-                            int toY = Y + Board.DirectionsY[direction]*distance;
                             BounceAction subAction = new BounceAction
-                                {
-                                    X = toX,
-                                    Y = toY,
-                                    MaxDistance = MaxDistance,
-                                    BounceLeft = BounceLeft - 1,
-                                    Probability = Probability/(8.0*MaxDistance)
-                                };
-                            actions.Add(subAction);
+                            {
+                                Coordinate = new FieldCoordinate(Coordinate.X+Board.DirectionsX[direction],
+                                                                Coordinate.Y + Board.DirectionsY[direction]
+                                                            ),
+                                Occurrence = Occurrence - 1,
+                                Probability = Probability / (8.0)
+                            };
+                            subActions.Add(subAction);
                         }
                 }
                 else
                     // Bounce done
-                    board.Probabilities[X, Y] += Probability;
+                    board.Probabilities[Coordinate.X, Coordinate.Y] += Probability;
             }
-            return actions;
+            return subActions;
         }
     }
 }

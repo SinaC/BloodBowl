@@ -1,14 +1,32 @@
-﻿using System.Collections.Generic;
-using BloodBowlPOC.Actions;
-
+﻿using BloodBowlPOC.Utils;
 namespace BloodBowlPOC.Boards
 {
     public class Board
     {
-        public static readonly int DirectionsCount = 8;
-        //                                            N, NE,  E, SE,  S, SW,  W, NW
-        public static readonly int[] DirectionsX = {  0,  1,  1,  1,  0, -1, -1, -1};
-        public static readonly int[] DirectionsY = { -1, -1,  0,  1,  1,  1,  0, -1};
+        //Upper Left is 0,0                N, NE,  E, SE,  S, SW,  W, NW
+        public static int[] DirectionsX = { 0, 1, 1, 1, 0, -1, -1, -1 };
+        public static int[] DirectionsY = { -1, -1, 0, 1, 1, 1, 0, -1 };
+
+        public static readonly  FieldCoordinate[] NorthThrowIn = { //From Down to Up
+                                                           new FieldCoordinate(-1, -1),
+                                                           new FieldCoordinate(0,-1),
+                                                           new FieldCoordinate(1,1)
+                                                       };
+        public static readonly FieldCoordinate[] SouthThrowIn = { //From Up to Down
+                                                           new FieldCoordinate(1,1),
+                                                           new FieldCoordinate(0,1),
+                                                           new FieldCoordinate(-1,1)
+                                                       };
+        public static readonly FieldCoordinate[] EastThrowIn = {  //To West
+                                                           new FieldCoordinate(-1,1),
+                                                           new FieldCoordinate(-1,0),
+                                                           new FieldCoordinate(-1,-1)
+                                                       };
+        public static readonly FieldCoordinate[] WestThrowIn = { //To East
+                                                           new FieldCoordinate(1,-1),
+                                                           new FieldCoordinate(1,0),
+                                                           new FieldCoordinate(1,1)
+                                                       };
 
         public int SizeX { get; private set; }
         public int SizeY { get; private set; }
@@ -28,30 +46,29 @@ namespace BloodBowlPOC.Boards
                     Probabilities[x, y] = 0;
         }
 
-        public void ComputeBounceProbabilities(int x, int y, int maxDistance, int maxBounces)
+        public FieldCoordinate[] GetThrowinRuler(FieldCoordinate coordinate)
         {
-            // Throw the ball
-            BounceAction startAction = new BounceAction
-                {
-                    X = x,
-                    Y = y,
-                    MaxDistance = maxDistance,
-                    BounceLeft = maxBounces,
-                };
-            Queue<ActionBase> actions = new Queue<ActionBase>();
-            actions.Enqueue(startAction);
-
-            // Perform actions
-            int iterations = 0;
-            while (actions.Count > 0)
-            {
-                ActionBase action = actions.Dequeue();
-                iterations++;
-                //
-                List<ActionBase> subActions = action.Perform(this);
-                subActions.ForEach(actions.Enqueue);
+            if(coordinate.X<0){
+                return WestThrowIn;
+            }else if (coordinate.X >= SizeX) {
+                return EastThrowIn;
+            }else if (coordinate.Y < 0) { //the Above 2 prioritize the sieline
+                return NorthThrowIn;
+            }else if (coordinate.Y >= SizeY) {
+                return SouthThrowIn;
             }
-            System.Diagnostics.Debug.WriteLine("Iterations:{0}", iterations);
+            else {
+                //What the fuck??
+                return SouthThrowIn;
+            }
+        }
+
+        //TODO: make a boardUtility class of some sort maybe?
+        public bool IsInbound(FieldCoordinate theSquare){
+            return theSquare.X > 0 
+                || theSquare.Y > 0 
+                || theSquare.X < SizeX 
+                || theSquare.Y < SizeY;
         }
     }
 }

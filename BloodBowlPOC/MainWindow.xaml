@@ -6,28 +6,10 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <StackPanel Orientation="Horizontal">
-            <TextBlock Text="Max bounces:"/>
-            <ComboBox x:Name="MaxBouncesComboBox" Width="40">
-                <ComboBoxItem>1</ComboBoxItem>
-                <ComboBoxItem>2</ComboBoxItem>
-                <ComboBoxItem>3</ComboBoxItem>
-                <ComboBoxItem>4</ComboBoxItem>
-                <ComboBoxItem>5</ComboBoxItem>
-            </ComboBox>
-            <TextBlock Text="Max distance:"/>
-            <ComboBox x:Name="MaxDistanceComboBox" Width="40">
-                <ComboBoxItem>1</ComboBoxItem>
-                <ComboBoxItem>2</ComboBoxItem>
-                <ComboBoxItem>3</ComboBoxItem>
-                <ComboBoxItem>4</ComboBoxItem>
-                <ComboBoxItem>5</ComboBoxItem>
-            </ComboBox>
-        </StackPanel>
-        
-        <Canvas x:Name="GridCanvas" Grid.Row="1"/>
-        <TextBlock x:Name="Status" Grid.Row="2"/>
+        <Grid x:Name="Grid" Grid.Row="0">
+            <!-- cells will be created on code-behind -->
+        </Grid>
+        <TextBlock x:Name="Status" Grid.Row="1"/>
     </Grid>
 </Window>

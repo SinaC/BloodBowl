@@ -53,12 +53,16 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Actions\ThrowInAction.cs" />
+    <Compile Include="Utils\FieldCoordinate.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
     <Compile Include="Actions\ActionBase.cs" />
     <Compile Include="Actions\BounceAction.cs" />
+    <Compile Include="Actions\KickOffAction.cs" />
+    <Compile Include="Actions\PassAction.cs" />
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
