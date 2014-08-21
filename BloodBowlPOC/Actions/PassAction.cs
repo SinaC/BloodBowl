@@ -1,9 +1,5 @@
 ﻿using BloodBowlPOC.Utils;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BloodBowlPOC.Actions
 {
@@ -11,7 +7,6 @@ namespace BloodBowlPOC.Actions
     {
         public FieldCoordinate Target { get; set; }
         public FieldCoordinate Origin { get; set; }
-
 
         public override List<ActionBase> Perform(Boards.Board board)
         {

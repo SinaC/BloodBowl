@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace BloodBowlPOC.Utils
+﻿namespace BloodBowlPOC.Utils
 {
     /// <summary>
     /// Class representing a square coordinate.
@@ -14,10 +8,10 @@ namespace BloodBowlPOC.Utils
         public readonly int X;
         public readonly int Y;
 
-        public FieldCoordinate(int X, int Y)
+        public FieldCoordinate(int x, int y)
         {
-            this.X = X;
-            this.Y = Y;
+            this.X = x;
+            this.Y = y;
         }
     }
 }

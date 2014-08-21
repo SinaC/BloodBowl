@@ -1,9 +1,5 @@
 ﻿using BloodBowlPOC.Utils;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using BloodBowlPOC.Boards;
 
 namespace BloodBowlPOC.Actions
@@ -19,11 +15,11 @@ namespace BloodBowlPOC.Actions
         public double Probability { get; set; }
                      
         //TODO: Make a Dice or Proba class to handle this kind of shit                   
-        protected static double[] distanceproba = 
+        protected static double[] DistanceProbabilities = 
                 { 0, 0, 1/36, 2/36, 3/36, 4/36, 5/36, 6/36, 5/36, 4/36, 3/36, 2/36, 1/36 };
               //  0  1   2     3     4     5     6     7     8     9     10    11    12
 
-        public override List<ActionBase> Perform(Boards.Board board)
+        public override List<ActionBase> Perform(Board board)
         {
             List<ActionBase> subActions = new List<ActionBase>(1);
 
@@ -52,7 +48,7 @@ namespace BloodBowlPOC.Actions
                             {
                                 Coordinate = target,
                                 Occurrence = 1,
-                                Probability = Probability * distanceproba[distance] / 3
+                                Probability = Probability * DistanceProbabilities[distance] / 3
                             };
                             subActions.Add(subAction);
                         }
