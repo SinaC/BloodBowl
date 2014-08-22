@@ -1,7 +1,11 @@
 Definitions:
-Kick Action: Dice 8 -> dice 6 -> bounce action (1) /  Bounce Action (2)
-Pass Action: Get Accuracy -> Scatter Action (3)
-Throw-In Action: Dice 3 -> Dice 2d6 -> Bounce Ation(1)
+Bounce Action: Dice 8 -> move 1 square in that direction. On oob throw-in.
+KickOff Action: Dice 8 -> dice 6 -> bounce action (1) /  Bounce Action (2). On oob, give to a player.
+Pass Action: Get Accuracy -> Scatter Action (3). On oob at end of scatter throw-in
+Throw-In Action: Dice 3 -> Dice 2d6 -> Bounce Action(1). On oob throw-in again.
+
+Dice 8 or 3 are for direction.
+Dice 6 are for distance.
 
 Next Developments:
 -Adapt most actions to provide an origin square so it can make sense for throwins
