@@ -7,9 +7,7 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <Grid x:Name="Grid" Grid.Row="0">
-            <!-- cells will be created on code-behind -->
-        </Grid>
+        <Canvas x:Name="GridCanvas" Grid.Row="0"/>
         <TextBlock x:Name="Status" Grid.Row="1"/>
     </Grid>
 </Window>

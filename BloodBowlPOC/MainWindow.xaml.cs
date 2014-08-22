@@ -15,6 +15,8 @@ namespace BloodBowlPOC
     /// </summary>
     public partial class MainWindow : Window
     {
+        public static readonly double CellWidth = 32;
+        public static readonly double CellHeight = 24;
         public const int SizeX = 15;
         public const int SizeY = 24;
         public TextBlock[,] Texts;
@@ -30,55 +32,54 @@ namespace BloodBowlPOC
             Texts = new TextBlock[SizeX,SizeY];
             Cells = new Border[SizeX,SizeY];
 
-            for (int i = 0; i < SizeX; i++)
-                Grid.ColumnDefinitions.Add(new ColumnDefinition
-                    {
-                        Width = new GridLength(32)
-                    });
-            for (int i = 0; i < SizeY; i++)
-                Grid.RowDefinitions.Add(new RowDefinition
-                    {
-                        Height = new GridLength(24)
-                    });
             for (int y = 0; y < SizeY; y++)
                 for (int x = 0; x < SizeX; x++)
                 {
                     TextBlock txt = new TextBlock
-                        {
-                            Text = String.Empty,
-                            HorizontalAlignment = HorizontalAlignment.Center
-                        };
+                    {
+                        Text = String.Empty,
+                        HorizontalAlignment = HorizontalAlignment.Center,
+                        Height = CellHeight,
+                        Width = CellWidth,
+                    };
                     Texts[x, y] = txt;
 
                     Border border = new Border
-                        {
-                            BorderBrush = new SolidColorBrush(Colors.Black),
-                            BorderThickness = new Thickness(1),
-                            Child = txt,
-                        };
-                    border.MouseUp += BorderOnMouseUp;
-                    Grid.SetColumn(border, x);
-                    Grid.SetRow(border, y);
-                    Grid.Children.Add(border);
+                    {
+                        BorderBrush = new SolidColorBrush(Colors.Black),
+                        BorderThickness = new Thickness(1),
+                        Child = txt,
+                        Height = CellHeight,
+                        Width = CellWidth,
+                    };
+                    border.MouseUp += CellOnMouseUp;
+                    Canvas.SetTop(border, y * CellHeight);
+                    Canvas.SetLeft(border, x * CellWidth);
+                    GridCanvas.Children.Add(border);
                     Cells[x, y] = border;
                 }
+            GridCanvas.Width = CellWidth * SizeX;
+            GridCanvas.Height = CellHeight * SizeY;
 
             //Test(Board, SizeX/2, SizeY/2);
         }
 
-        private void BorderOnMouseUp(object sender, MouseButtonEventArgs mouseButtonEventArgs)
+        private void CellOnMouseUp(object sender, MouseButtonEventArgs mouseButtonEventArgs)
         {
             Border border = (sender as Border);
             if (border != null)
             {
-                int x = Grid.GetColumn(border);
-                int y = Grid.GetRow(border);
-                if (x >= 0 && x < SizeX && y >= 0 && y < SizeY)
+                // Get cell
+                Point relativePoint = border.TransformToAncestor(GridCanvas).Transform(new Point(0, 0));
+                int cellX = (int)(relativePoint.X / CellWidth);
+                int cellY = (int)(relativePoint.Y / CellHeight);
+                if (cellX >= 0 && cellX < SizeX && cellY >= 0 && cellY < SizeY)
                 {
-                    //Cells[x,y].BorderBrush = new SolidColorBrush(Colors.LightBlue);
+                    // Compute and display
                     Board.Reset();
                     ClearGrid();
-                    Test(Board, new FieldCoordinate(x,y));
+                    Test(Board, new FieldCoordinate(cellX, cellY));
+                    Cells[cellX, cellY].BorderBrush = new SolidColorBrush(Colors.White);
                 }
             }
         }

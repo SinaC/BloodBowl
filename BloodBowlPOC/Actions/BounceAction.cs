@@ -94,6 +94,7 @@ namespace BloodBowlPOC.Actions
                 Occurrence = Occurrence - 1,
                 Probability = Probability / (8.0)
             };
-        }
+        }
+
     }
 }
