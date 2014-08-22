@@ -16,6 +16,7 @@ namespace BloodBowlPOC.Actions
 
             subActions.Add(new BounceAction { 
                 Coordinate = Target, 
+                LastKnownInBound = board.GetLastInboundOnPath(Origin,Target),
                 Occurrence = 3, 
                 Probability = 1-accurateProba 
             });
