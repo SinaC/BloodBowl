@@ -4,11 +4,11 @@ using BloodBowlPOC.Utils;
 
 namespace BloodBowlPOC.Actions
 {
-    // Current standing problem with the bounce class
-    // Bounce and scatter both use this class but utilmately the behave differently
-    // Bounces offer catch opportunities and are throw-in on the first OOB square
-    // while Scatter must finish all 3 repetitions before deciding a throwing and does
-    // not offer catch opportunities, only at the end of the 3 moves.
+    // Current standing problem with the bounce class Bounce and scatter both use this 
+    // class but utilmately they behave differently.
+    // Bounces offer catch opportunities and are thrown-in on the first OOB square
+    // while Scatter must finish all 3 repetitions before deciding if a throw-in happen
+    // and does not offer catch opportunities until after all scatters are done.
     public class BounceAction : ActionBase
     {
         public FieldCoordinate Coordinate { get; set; }

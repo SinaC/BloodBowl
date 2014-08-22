@@ -1,4 +1,5 @@
 ﻿using BloodBowlPOC.Utils;
+using System;
 namespace BloodBowlPOC.Boards
 {
     public class Board
@@ -57,10 +58,8 @@ namespace BloodBowlPOC.Boards
             }else if (coordinate.Y >= SizeY) {
                 return SouthThrowIn;
             }
-            else {
-                //What the fuck??
-                return SouthThrowIn;
-            }
+
+            throw new ArgumentException("Coordinate didn't make sense.","coordinate");
         }
 
         //TODO: make a boardUtility class of some sort maybe?
@@ -69,6 +68,25 @@ namespace BloodBowlPOC.Boards
                 || theSquare.Y > 0 
                 || theSquare.X < SizeX 
                 || theSquare.Y < SizeY;
+        }
+
+        public FieldCoordinate GetLastInboundOnPath(FieldCoordinate theOrigin, FieldCoordinate theTarget)
+        {
+            if (IsInbound(theTarget)) {
+                return theTarget;
+            }
+
+            var slope = (theTarget.Y - theOrigin.Y) / (double)(theTarget.X - theOrigin.X);
+
+            //0, X, ou SizeX
+            var xToUse = Math.Min(SizeX, Math.Max(0, theTarget.X));
+
+            //0, Y calculé en X, ou SizeY
+            var lastY = Math.Min(SizeY, Math.Max(0, (int)Math.Round((xToUse - theOrigin.X) * slope)));
+
+            var lastCoord = new FieldCoordinate(xToUse, lastY);
+
+            return lastCoord;
         }
     }
 }

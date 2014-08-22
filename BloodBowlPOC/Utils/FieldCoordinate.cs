@@ -13,5 +13,9 @@
             this.X = x;
             this.Y = y;
         }
+
+        public static bool AreEqual(FieldCoordinate a, FieldCoordinate b){
+            return a.X == b.X && a.Y == b.Y;
+        }
     }
 }

@@ -1,10 +1,11 @@
 ﻿using BloodBowlPOC.Utils;
 using System.Collections.Generic;
 using BloodBowlPOC.Boards;
+using System;
 
 namespace BloodBowlPOC.Actions
 {
-    //Represents a Throwin from out of bounds
+    //Represents a Throw-in from out of bounds
     //Do we give the OOB Coordinate or the closest inbound position ?
     //If so what with direction ?
     //For now I'm gonna expect the OOB position, I think it makes a lot of things easier.
@@ -40,31 +41,33 @@ namespace BloodBowlPOC.Actions
                                                                      LastInboundSquare.Y + distance * ruler[direction].Y
                                                                 );
 
-                            //  if throwin is out of bound
-                            //  compute last inbound square
-                            //  throw in again
+                            if (!board.IsInbound(target)) {
+                                //  if throwin is out of bound, compute new last inbound square
+                                //  throw in again
+                                LastInboundSquare = board.GetLastInboundOnPath(LastInboundSquare, target);
 
-                            BounceAction subAction = new BounceAction
-                            {
-                                Coordinate = target,
-                                Occurrence = 1,
-                                Probability = Probability * DistanceProbabilities[distance] / 3
-                            };
-                            subActions.Add(subAction);
+                                ThrowInAction subAction = new ThrowInAction {
+                                    Coordinate = target,
+                                    LastInboundSquare = LastInboundSquare,
+                                    Probability = Probability * DistanceProbabilities[distance] / 3
+                                };
+
+                                //The sad thing here is that all the sub throwins from the same square are the same
+                                //So if we can indentify them we could do them only once with a sum of probas
+                                subActions.Add(subAction);
+                            }
+                            else {
+                                BounceAction subAction = new BounceAction {
+                                    Coordinate = target,
+                                    Occurrence = 1,
+                                    Probability = Probability * DistanceProbabilities[distance] / 3
+                                };
+                                subActions.Add(subAction);
+                            }
                         }
             }
 
             return subActions;
-        }
-
-        protected FieldCoordinate GetLastInboundOnPath(FieldCoordinate origin, FieldCoordinate target, Board theBoard)
-        {
-            if (theBoard.IsInbound(target)){
-                return target;
-            }
-            //Obviously ca fait pas encore ce que ca doit.
-            //Faut tracer la ligne genre Bresenham et choisir le dernier square inbound
-            return target;
         }
     }
 }
