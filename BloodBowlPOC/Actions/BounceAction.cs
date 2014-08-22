@@ -57,6 +57,7 @@ namespace BloodBowlPOC.Actions
             // Create a new action for each direction/distance if occurrence > 0
             if (BounceLeft > 0) {
                 for (int distance = 1; distance <= MaxDistance; distance++)
+                    //en fait le bounce c'est toujours une distance de 1 (ben)
                     for (int direction = 0; direction < 8; direction++) {
                         BounceAction subAction = childBounceConstructor(board, direction);
                         subActions.Add(subAction);
