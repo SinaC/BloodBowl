@@ -61,6 +61,9 @@ namespace BloodBowlPOC
             GridCanvas.Width = CellWidth * SizeX;
             GridCanvas.Height = CellHeight * SizeY;
 
+            MaxBouncesComboBox.SelectedIndex = 2;
+            MaxDistanceComboBox.SelectedIndex = 2;
+
             //Test(Board, SizeX/2, SizeY/2);
         }
 
@@ -78,7 +81,10 @@ namespace BloodBowlPOC
                     // Compute and display
                     Board.Reset();
                     ClearGrid();
-                    Test(Board, new FieldCoordinate(cellX, cellY));
+                    int maxDistance = int.Parse(MaxDistanceComboBox.SelectionBoxItem.ToString());
+                    int maxBounces = int.Parse(MaxBouncesComboBox.SelectionBoxItem.ToString());
+                    Board.ComputeBounceProbabilities(new FieldCoordinate(cellX, cellY), maxDistance, maxBounces);
+                    DisplayProbabilities(Board);
                     Cells[cellX, cellY].BorderBrush = new SolidColorBrush(Colors.White);
                 }
             }
@@ -95,29 +101,8 @@ namespace BloodBowlPOC
                 }
         }
 
-        public void Test(Board board, FieldCoordinate origin)
+        private void DisplayProbabilities(Board board)
         {
-            int fromX, fromY;
-            BounceAction startAction = new BounceAction
-                {
-                    Coordinate = origin,
-                    Occurrence = 3,
-                    Probability = 1,
-                };
-            //
-            Queue<ActionBase> actions = new Queue<ActionBase>();
-            actions.Enqueue(startAction);
-
-            // Perform actions
-            int iterations = 0;
-            while (actions.Count > 0)
-            {
-                ActionBase action = actions.Dequeue();
-                iterations++;
-                //
-                List<ActionBase> subActions = action.Perform(board);
-                subActions.ForEach(actions.Enqueue);
-            }
             // Get min/max/sum
             double min = Double.MaxValue;
             double max = Double.MinValue;
@@ -135,23 +120,27 @@ namespace BloodBowlPOC
                             max = probability;
                     }
                 }
-            System.Diagnostics.Debug.WriteLine("Sum:{0} Min:{1} Max:{2} | Iterations:{3}", sum, min, max, iterations);
-            Status.Text = String.Format("Sum:{0:0.####} Min:{1:0.####} Max:{2:0.####} | Iterations:{3}", sum * 100, min * 100, max * 100, iterations);
-            // Display
+            System.Diagnostics.Debug.WriteLine("Sum:{0} Min:{1} Max:{2}", sum, min, max);
+            Status.Text = String.Format("Sum:{0:0.####} Min:{1:0.####} Max:{2:0.####}", sum * 100, min * 100, max * 100);
+            bool uniqueValue = Math.Abs(min - max) < 0.0000001; // if min == max -> display in green
             for (int y = 0; y < SizeY; y++)
                 for (int x = 0; x < SizeX; x++)
                 {
                     double probability = board.Probabilities[x, y];
                     if (probability > 0)
                     {
-                        double red = 255 - (probability - min)*(255 - 0)/(max - min);
-                        double green = 0 + (probability - min)*(255 - 0)/(max - min);
-                        Texts[x, y].Text = String.Format("{0:0.##}", 100.0*probability);
-                        Cells[x, y].Background = new SolidColorBrush(Color.FromRgb((byte) red, (byte) green, 0));
+                        Texts[x, y].Text = 100.0 * probability < 0.01 ? "<0.01" : String.Format("{0:0.##}", 100.0 * probability);
+                        Texts[x, y].ToolTip = String.Format("{0}", 100.0 * probability);
+                        if (uniqueValue)
+                            Cells[x, y].Background = new SolidColorBrush(Color.FromRgb(0, 0xFF, 0));
+                        else
+                        {
+                            double red = 255 - (probability - min) * (255 - 0) / (max - min);
+                            double green = 0 + (probability - min) * (255 - 0) / (max - min);
+                            Cells[x, y].Background = new SolidColorBrush(Color.FromRgb((byte)red, (byte)green, 0));
+                        }
                     }
                 }
-            if (startAction.Coordinate.X >= 0 && startAction.Coordinate.Y < SizeX && startAction.Coordinate.X >= 0 && startAction.Coordinate.Y < SizeY)
-                Cells[startAction.Coordinate.X, startAction.Coordinate.Y].BorderBrush = new SolidColorBrush(Colors.White);
         }
     }
 }

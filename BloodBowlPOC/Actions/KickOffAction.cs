@@ -22,7 +22,7 @@ namespace BloodBowlPOC.Actions
                             Coordinate = new FieldCoordinate(Target.X + distance*Board.DirectionsX[direction],
                                 Target.Y + distance*Board.DirectionsY[direction]
                                 ),
-                            Occurrence = 1,
+                            BounceLeft = 1,
                             Probability = 1
                         };
                         subActions.Add(subAction);

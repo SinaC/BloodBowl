@@ -59,7 +59,7 @@ namespace BloodBowlPOC.Actions
                             else {
                                 BounceAction subAction = new BounceAction {
                                     Coordinate = target,
-                                    Occurrence = 1,
+                                    BounceLeft = 1,
                                     Probability = Probability * DistanceProbabilities[distance] / 3
                                 };
                                 subActions.Add(subAction);

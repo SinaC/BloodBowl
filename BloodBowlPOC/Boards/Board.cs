@@ -1,4 +1,6 @@
-﻿using BloodBowlPOC.Utils;
+﻿using System.Collections.Generic;
+using BloodBowlPOC.Actions;
+using BloodBowlPOC.Utils;
 using System;
 namespace BloodBowlPOC.Boards
 {
@@ -45,6 +47,31 @@ namespace BloodBowlPOC.Boards
             for (int y = 0; y < SizeY; y++)
                 for (int x = 0; x < SizeX; x++)
                     Probabilities[x, y] = 0;
+        }
+
+        public void ComputeBounceProbabilities(FieldCoordinate point, int maxDistance, int maxBounces)
+        {
+            // Throw the ball
+            BounceAction startAction = new BounceAction
+            {
+                Coordinate = point,
+                MaxDistance = maxDistance,
+                BounceLeft = maxBounces,
+            };
+            Queue<ActionBase> actions = new Queue<ActionBase>();
+            actions.Enqueue(startAction);
+
+            // Perform actions
+            int iterations = 0;
+            while (actions.Count > 0)
+            {
+                ActionBase action = actions.Dequeue();
+                iterations++;
+                //
+                List<ActionBase> subActions = action.Perform(this);
+                subActions.ForEach(actions.Enqueue);
+            }
+            System.Diagnostics.Debug.WriteLine("Iterations:{0}", iterations);
         }
 
         public FieldCoordinate[] GetThrowinRuler(FieldCoordinate coordinate)
