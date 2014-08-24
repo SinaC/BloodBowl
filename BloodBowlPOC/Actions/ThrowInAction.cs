@@ -1,7 +1,6 @@
 ﻿using BloodBowlPOC.Utils;
 using System.Collections.Generic;
 using BloodBowlPOC.Boards;
-using System;
 
 namespace BloodBowlPOC.Actions
 {
@@ -53,7 +52,7 @@ namespace BloodBowlPOC.Actions
                                 };
 
                                 //The sad thing here is that all the sub throwins from the same square are the same
-                                //So if we can indentify them we could do them only once with a sum of probas
+                                //So if we can identify them we could do them only once with a sum of probas
                                 subActions.Add(subAction);
                             }
                             else {

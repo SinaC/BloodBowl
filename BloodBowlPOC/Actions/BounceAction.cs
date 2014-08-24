@@ -13,16 +13,14 @@ namespace BloodBowlPOC.Actions
     {
         public FieldCoordinate Coordinate { get; set; }
         public FieldCoordinate LastKnownInBound { get; set; }
-        public int MaxDistance { get; set; }
         public int BounceLeft { get; set; }
         public double Probability { get; set; }
 
-        List<ActionBase> subActions = new List<ActionBase>();
+        protected readonly List<ActionBase> SubActions = new List<ActionBase>();
 
         public BounceAction()
         {
             Probability = 1.0; // starts with 100%
-            MaxDistance = 1;
         }
 
         public override List<ActionBase> Perform(Board board)
@@ -37,15 +35,14 @@ namespace BloodBowlPOC.Actions
             {
                 ContinueBounce(board);
             }
-            return subActions;
+            return SubActions;
         }
 
         protected virtual void OutOfBoundBehaviour(Board board)
         {
-            //List<ActionBase> subActions = new List<ActionBase>();
             // Out of board
             //System.Diagnostics.Debug.WriteLine("Out of board");
-            subActions.Add(new ThrowInAction {
+            SubActions.Add(new ThrowInAction {
                 Coordinate = Coordinate,
                 LastInboundSquare = LastKnownInBound,
                 Probability = Probability
@@ -56,28 +53,25 @@ namespace BloodBowlPOC.Actions
         {
             // Create a new action for each direction/distance if occurrence > 0
             if (BounceLeft > 0) {
-                for (int distance = 1; distance <= MaxDistance; distance++)
-                    //en fait le bounce c'est toujours une distance de 1 (ben)
-                    for (int direction = 0; direction < 8; direction++) {
-                        BounceAction subAction = childBounceConstructor(board, direction);
-                        subActions.Add(subAction);
-                    }
+                for (int direction = 0; direction < 8; direction++) {
+                    BounceAction subAction = ChildBounceConstructor(board, direction);
+                    SubActions.Add(subAction);
+                }
             }
             else
                 // Bounce done
                 board.Probabilities[Coordinate.X, Coordinate.Y] += Probability;
         }
 
-        protected virtual BounceAction childBounceConstructor(Board board, int direction)
+        protected virtual BounceAction ChildBounceConstructor(Board board, int direction)
         {
             return new BounceAction {
                 Coordinate = new FieldCoordinate(Coordinate.X + Board.DirectionsX[direction],
                     Coordinate.Y + Board.DirectionsY[direction]
                     ),
-                MaxDistance = MaxDistance,
                 LastKnownInBound = Coordinate,
                 BounceLeft = BounceLeft - 1,
-                Probability = Probability / (8.0 * MaxDistance)
+                Probability = Probability / 8.0
             };
         }
     }
@@ -94,16 +88,15 @@ namespace BloodBowlPOC.Actions
             }
         }
 
-        protected override BounceAction childBounceConstructor(Board board, int direction)
+        protected override BounceAction ChildBounceConstructor(Board board, int direction)
         {
             return new ScatterAction{
                 Coordinate = new FieldCoordinate(Coordinate.X + Board.DirectionsX[direction],
                     Coordinate.Y + Board.DirectionsY[direction]
                     ),
-                MaxDistance = MaxDistance,
                 LastKnownInBound = board.IsInbound(Coordinate) ? Coordinate : LastKnownInBound,
                 BounceLeft = BounceLeft - 1,
-                Probability = Probability / (8.0 * MaxDistance)
+                Probability = Probability / 8.0
             };
         }
 

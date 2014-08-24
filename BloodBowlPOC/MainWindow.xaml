@@ -17,14 +17,6 @@
                 <ComboBoxItem>4</ComboBoxItem>
                 <ComboBoxItem>5</ComboBoxItem>
             </ComboBox>
-            <TextBlock Text="Max distance:"/>
-            <ComboBox x:Name="MaxDistanceComboBox" Width="40">
-                <ComboBoxItem>1</ComboBoxItem>
-                <ComboBoxItem>2</ComboBoxItem>
-                <ComboBoxItem>3</ComboBoxItem>
-                <ComboBoxItem>4</ComboBoxItem>
-                <ComboBoxItem>5</ComboBoxItem>
-            </ComboBox>
         </StackPanel>
 
         <Canvas x:Name="GridCanvas" Grid.Row="1"/>

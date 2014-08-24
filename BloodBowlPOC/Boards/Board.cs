@@ -49,13 +49,12 @@ namespace BloodBowlPOC.Boards
                     Probabilities[x, y] = 0;
         }
 
-        public void ComputeBounceProbabilities(FieldCoordinate point, int maxDistance, int maxBounces)
+        public void ComputeBounceProbabilities(FieldCoordinate point, int maxBounces)
         {
             // Throw the ball
             BounceAction startAction = new BounceAction
             {
                 Coordinate = point,
-                MaxDistance = maxDistance,
                 BounceLeft = maxBounces,
             };
             Queue<ActionBase> actions = new Queue<ActionBase>();

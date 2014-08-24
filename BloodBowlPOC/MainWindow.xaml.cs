@@ -62,7 +62,6 @@ namespace BloodBowlPOC
             GridCanvas.Height = CellHeight * SizeY;
 
             MaxBouncesComboBox.SelectedIndex = 2;
-            MaxDistanceComboBox.SelectedIndex = 2;
 
             //Test(Board, SizeX/2, SizeY/2);
         }
@@ -81,9 +80,8 @@ namespace BloodBowlPOC
                     // Compute and display
                     Board.Reset();
                     ClearGrid();
-                    int maxDistance = int.Parse(MaxDistanceComboBox.SelectionBoxItem.ToString());
                     int maxBounces = int.Parse(MaxBouncesComboBox.SelectionBoxItem.ToString());
-                    Board.ComputeBounceProbabilities(new FieldCoordinate(cellX, cellY), maxDistance, maxBounces);
+                    Board.ComputeBounceProbabilities(new FieldCoordinate(cellX, cellY), maxBounces);
                     DisplayProbabilities(Board);
                     Cells[cellX, cellY].BorderBrush = new SolidColorBrush(Colors.White);
                 }
