@@ -17,6 +17,8 @@
                 <ComboBoxItem>4</ComboBoxItem>
                 <ComboBoxItem>5</ComboBoxItem>
             </ComboBox>
+            <RadioButton GroupName="Mode" Content="Pass" IsChecked="True" Margin="20 0 0 0" Name="RadioPass"/>
+            <RadioButton GroupName="Mode" Content="KickOff" Margin="10 0 0 0" Name="RadioKick"/>
         </StackPanel>
 
         <Canvas x:Name="GridCanvas" Grid.Row="1"/>

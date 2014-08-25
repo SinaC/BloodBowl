@@ -51,20 +51,31 @@ namespace BloodBowlPOC.Boards
                     Probabilities[x, y] = 0;
         }
 
-        public void ComputeBounceProbabilities(FieldCoordinate point, int maxBounces)
+        public void ComputeBounceProbabilities(FieldCoordinate point, int maxBounces, string selectedAction)
         {
+            ActionBase startAction = null;
             // Throw the ball
-            ActionBase startAction = new BounceAction {
-                Coordinate = point,
-                LastKnownInBound = point,
-                BounceLeft = maxBounces,
-            };
+            switch (selectedAction) {
+                case "Pass":
+                    startAction = new BounceAction {
+                        Coordinate = point,
+                        LastKnownInBound = point,
+                        BounceLeft = maxBounces,
+                    };
+                    break;
+                case "KickOff":
+                    startAction = new KickOffAction {
+                        Target = point
+                        //                LastKnownInBound = point,
+                        //              BounceLeft = maxBounces,
+                    };
+                    break;
+                default:
+                    throw new ArgumentException("Mode Slected Didn't make sense", "selectedAction"); 
+            }
+            
 
-            //ActionBase startAction = new KickOffAction {
-            //    Target = point
-            //    //                LastKnownInBound = point,
-            //    //              BounceLeft = maxBounces,
-            //};
+
 
             Queue<ActionBase> actions = new Queue<ActionBase>();
             actions.Enqueue(startAction);

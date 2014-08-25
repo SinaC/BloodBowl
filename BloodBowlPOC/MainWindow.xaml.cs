@@ -81,7 +81,8 @@ namespace BloodBowlPOC
                     Board.Reset();
                     ClearGrid();
                     int maxBounces = int.Parse(MaxBouncesComboBox.SelectionBoxItem.ToString());
-                    Board.ComputeBounceProbabilities(new FieldCoordinate(cellX, cellY), maxBounces);
+                    var radioChecked = RadioKick.IsChecked.Value ? RadioKick.Content.ToString() : RadioPass.Content.ToString();
+                    Board.ComputeBounceProbabilities(new FieldCoordinate(cellX, cellY), maxBounces, radioChecked);
                     DisplayProbabilities(Board);
                     Cells[cellX, cellY].BorderBrush = new SolidColorBrush(Colors.White);
                 }
