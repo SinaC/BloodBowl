@@ -50,6 +50,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Actions\ThrowInAction.cs" />
+    <Compile Include="Actions\ScatterAction.cs" />
     <Compile Include="Utils\Dice.cs" />
     <Compile Include="Utils\FieldCoordinate.cs" />
     <Page Include="MainWindow.xaml">

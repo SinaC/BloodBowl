@@ -4,11 +4,7 @@ using BloodBowlPOC.Utils;
 
 namespace BloodBowlPOC.Actions
 {
-    // Current standing problem with the bounce class Bounce and scatter both use this 
-    // class but utilmately they behave differently.
     // Bounces offer catch opportunities and are thrown-in on the first OOB square
-    // while Scatter must finish all 3 repetitions before deciding if a throw-in happen
-    // and does not offer catch opportunities until after all scatters are done.
     public class BounceAction : ActionBase
     {
         public FieldCoordinate Coordinate { get; set; }
@@ -20,19 +16,20 @@ namespace BloodBowlPOC.Actions
 
         public BounceAction()
         {
-            Probability = 1.0; // starts with 100%
+            Probability = 1.0; // starts with 100% if nothing else is provided.
         }
 
         public override List<ActionBase> Perform(Board board)
         {
-            //System.Diagnostics.Debug.WriteLine("Dequeue Action:{0},{1} -> {2},{3} | {4} | {5}", FromX, FromY, toX, toY, BounceLeft, Probability);
+            //System.Diagnostics.Debug.WriteLine("Dequeue Action:{0},{1} -> {2},{3} | {4} | {5}", LastKnownInBound.X, LastKnownInBound.Y, Coordinate.X, Coordinate.Y, BounceLeft, Probability);
+            if (board.EpsilonProba > Probability ) {
+                return SubActions;
+            }
 
-            if (Coordinate.X < 0 || Coordinate.X >= board.SizeX || Coordinate.Y < 0 || Coordinate.Y >= board.SizeY)
-            {
+            if (!board.IsInbound(Coordinate)) {
                 OutOfBoundBehaviour(board);
             }
-            else
-            {
+            else {
                 ContinueBounce(board);
             }
             return SubActions;
@@ -74,31 +71,5 @@ namespace BloodBowlPOC.Actions
                 Probability = Probability / 8.0
             };
         }
-    }
-
-    public class ScatterAction : BounceAction
-    {
-        protected override void OutOfBoundBehaviour(Board board)
-        {
-            if (BounceLeft > 0) {
-                ContinueBounce(board);
-            }
-            else {
-                base.OutOfBoundBehaviour(board);
-            }
-        }
-
-        protected override BounceAction ChildBounceConstructor(Board board, int direction)
-        {
-            return new ScatterAction{
-                Coordinate = new FieldCoordinate(Coordinate.X + Board.DirectionsX[direction],
-                    Coordinate.Y + Board.DirectionsY[direction]
-                    ),
-                LastKnownInBound = board.IsInbound(Coordinate) ? Coordinate : LastKnownInBound,
-                BounceLeft = BounceLeft - 1,
-                Probability = Probability / 8.0
-            };
-        }
-
     }
 }

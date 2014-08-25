@@ -34,12 +34,14 @@ namespace BloodBowlPOC.Boards
         public int SizeX { get; private set; }
         public int SizeY { get; private set; }
         public double[,] Probabilities { get; set; }
+        public double EpsilonProba { get; private set; }
 
         public Board(int sizeX, int sizeY)
         {
             SizeX = sizeX;
             SizeY = sizeY;
             Probabilities = new double[SizeX,SizeY];
+            EpsilonProba = 0.000001;
         }
 
         public void Reset()
@@ -52,11 +54,18 @@ namespace BloodBowlPOC.Boards
         public void ComputeBounceProbabilities(FieldCoordinate point, int maxBounces)
         {
             // Throw the ball
-            BounceAction startAction = new BounceAction
-            {
+            ActionBase startAction = new BounceAction {
                 Coordinate = point,
+                LastKnownInBound = point,
                 BounceLeft = maxBounces,
             };
+
+            //ActionBase startAction = new KickOffAction {
+            //    Target = point
+            //    //                LastKnownInBound = point,
+            //    //              BounceLeft = maxBounces,
+            //};
+
             Queue<ActionBase> actions = new Queue<ActionBase>();
             actions.Enqueue(startAction);
 
@@ -90,12 +99,13 @@ namespace BloodBowlPOC.Boards
 
         //TODO: make a boardUtility class of some sort maybe?
         public bool IsInbound(FieldCoordinate theSquare){
-            return theSquare.X > 0 
-                || theSquare.Y > 0 
-                || theSquare.X < SizeX 
-                || theSquare.Y < SizeY;
+            return theSquare.X >= 0 
+                && theSquare.Y >= 0 
+                && theSquare.X < SizeX 
+                && theSquare.Y < SizeY;
         }
 
+        //c'est completement faux ce truc
         public FieldCoordinate GetLastInboundOnPath(FieldCoordinate theOrigin, FieldCoordinate theTarget)
         {
             if (IsInbound(theTarget)) {
