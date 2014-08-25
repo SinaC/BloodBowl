@@ -72,4 +72,24 @@ namespace BloodBowlPOC.Actions
             };
         }
     }
+
+    public class KickOffBounceAction : BounceAction
+    {
+        protected override void OutOfBoundBehaviour(Board board)
+        {
+            //actually does nothing, that's intended
+        }
+
+        protected override BounceAction ChildBounceConstructor(Board board, int direction)
+        {
+            return new KickOffBounceAction {
+                Coordinate = new FieldCoordinate(Coordinate.X + Board.DirectionsX[direction],
+                    Coordinate.Y + Board.DirectionsY[direction]
+                    ),
+                LastKnownInBound = Coordinate,
+                BounceLeft = BounceLeft - 1,
+                Probability = Probability / 8.0
+            };
+        }
+    }
 }
