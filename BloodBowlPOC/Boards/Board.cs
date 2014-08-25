@@ -142,7 +142,7 @@ namespace BloodBowlPOC.Boards
             double slope = (newTarget.Y - newOrigin.Y) / (double)(newTarget.X - newOrigin.X);
 
             var intersectionAtX = new FieldCoordinate(SizeX-1, (int)Math.Round(newOrigin.Y + (SizeX - 1 - newOrigin.X) * slope));
-            var intersectionAtY = new FieldCoordinate((int)Math.Round((SizeY - 1) / slope + newOrigin.Y + newOrigin.X), SizeY-1);
+            var intersectionAtY = new FieldCoordinate((int)Math.Round((SizeY - 1 - newOrigin.Y) / slope + newOrigin.X), SizeY - 1);
 
             var lastSquare = new FieldCoordinate(
                     Math.Min(intersectionAtX.X, intersectionAtY.X),
