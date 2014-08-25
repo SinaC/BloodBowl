@@ -123,6 +123,32 @@ namespace BloodBowlPOC.Boards
                 return new FieldCoordinate(Math.Max(0, Math.Min(theTarget.X, SizeX-1)), theOrigin.Y);
             }
 
+            //// C'est pas plus simple ca ? De plus, certains unit tests ne passent pas avec ton code
+
+            //int borderX = Math.Min(Math.Max(0, theTarget.X), SizeX - 1);
+            //int borderY = Math.Min(Math.Max(0, theTarget.Y), SizeY - 1);
+
+            //if (borderX == theTarget.X && borderY == theTarget.Y) // on sort pas -> pas de calcul
+            //    return theTarget;
+
+            //int inBoundX;
+            //int inBoundY;
+
+            //if (Math.Abs(theTarget.X - borderX) > Math.Abs(theTarget.Y - borderY)) // On sort en x ou y ?
+            //{
+            //    double slope = (double)(theTarget.Y - theOrigin.Y) / (theTarget.X - theOrigin.X);
+            //    inBoundX = borderX;
+            //    inBoundY = (int)(theOrigin.Y + slope * (borderX - theOrigin.X));
+            //}
+            //else
+            //{
+            //    double slope = (double)(theTarget.X - theOrigin.X) / (theTarget.Y - theOrigin.Y);
+            //    inBoundX = (int)(theOrigin.X + slope * (borderY - theOrigin.Y));
+            //    inBoundY = borderY;
+            //}
+
+            //return new FieldCoordinate(inBoundX, inBoundY);
+
             //On flip les axes pour aller toujours en positif dans les 2 axes, ya peut etre plus facile mais
             //mon cerveau ne marchait plus.
 

@@ -76,5 +76,80 @@ namespace BloodBowlTest
             return theBoard.GetLastInboundOnPath(from, to);
 
         }
+
+        [TestMethod]
+        public void GetLastInboundOnPathTest_Inbounds()
+        {
+            Board theBoard = new Board(4, 4);
+
+            FieldCoordinate from = new FieldCoordinate(3, 3);
+            FieldCoordinate to = new FieldCoordinate(2, 2);
+            FieldCoordinate expectedResult = new FieldCoordinate(2, 2);
+
+            FieldCoordinate result = theBoard.GetLastInboundOnPath(from, to);
+
+            Assert.IsTrue(FieldCoordinate.AreEqual(expectedResult, result)
+                , String.Format("Expected {0}, got {1}", expectedResult, result));
+        }
+
+        [TestMethod]
+        public void GetLastInboundOnPathTest_OutOfBounds()
+        {
+            Board theBoard = new Board(4, 4);
+
+            FieldCoordinate from = new FieldCoordinate(3, 3);
+            FieldCoordinate to = new FieldCoordinate(-1, -1);
+            FieldCoordinate expectedResult = new FieldCoordinate(0, 0);
+
+            FieldCoordinate result = theBoard.GetLastInboundOnPath(from, to);
+
+            Assert.IsTrue(FieldCoordinate.AreEqual(expectedResult, result)
+                , String.Format("Expected {0}, got {1}", expectedResult, result));
+        }
+
+        [TestMethod]
+        public void GetLastInboundOnPathTest_OutOfBounds2()
+        {
+            Board theBoard = new Board(6, 6);
+
+            FieldCoordinate from = new FieldCoordinate(2, 3);
+            FieldCoordinate to = new FieldCoordinate(6, 0);
+            FieldCoordinate expectedResult = new FieldCoordinate(5, 0);
+
+            FieldCoordinate result = theBoard.GetLastInboundOnPath(from, to);
+
+            Assert.IsTrue(FieldCoordinate.AreEqual(expectedResult, result)
+                , String.Format("Expected {0}, got {1}", expectedResult, result));
+        }
+
+        [TestMethod]
+        public void GetLastInboundOnPathTest_OutOfBounds3()
+        {
+            Board theBoard = new Board(4, 4);
+
+            FieldCoordinate from = new FieldCoordinate(3, 1);
+            FieldCoordinate to = new FieldCoordinate(5, -1);
+            FieldCoordinate expectedResult = new FieldCoordinate(3, 1);
+
+            FieldCoordinate result = theBoard.GetLastInboundOnPath(from, to);
+
+            Assert.IsTrue(FieldCoordinate.AreEqual(expectedResult, result)
+                , String.Format("Expected {0}, got {1}", expectedResult, result));
+        }
+
+        [TestMethod]
+        public void GetLastInboundOnPathTest_OutOfBounds4()
+        {
+            Board theBoard = new Board(4, 4);
+
+            FieldCoordinate from = new FieldCoordinate(3, 1);
+            FieldCoordinate to = new FieldCoordinate(4, -4);
+            FieldCoordinate expectedResult = new FieldCoordinate(3, 0);
+
+            FieldCoordinate result = theBoard.GetLastInboundOnPath(from, to);
+
+            Assert.IsTrue(FieldCoordinate.AreEqual(expectedResult, result)
+                , String.Format("Expected {0}, got {1}", expectedResult, result));
+        }
     }
 }
