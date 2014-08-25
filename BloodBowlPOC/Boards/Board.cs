@@ -116,24 +116,48 @@ namespace BloodBowlPOC.Boards
                 && theSquare.Y < SizeY;
         }
 
-        //c'est completement faux ce truc
         public FieldCoordinate GetLastInboundOnPath(FieldCoordinate theOrigin, FieldCoordinate theTarget)
         {
-            if (IsInbound(theTarget)) {
-                return theTarget;
+            if (theOrigin.X == theTarget.X) { // Vertical
+                return new FieldCoordinate(theOrigin.X, Math.Max(0,Math.Min(theTarget.Y, SizeY-1)));
             }
 
-            var slope = (theTarget.Y - theOrigin.Y) / (double)(theTarget.X - theOrigin.X);
+            if (theOrigin.Y == theTarget.Y) { // Horizontal
+                return new FieldCoordinate(Math.Max(0, Math.Min(theTarget.X, SizeX-1)), theOrigin.Y);
+            }
 
-            //0, X, ou SizeX
-            var xToUse = Math.Min(SizeX, Math.Max(0, theTarget.X));
+            //On flip les axes pour aller toujours en positif dans les 2 axes, ya peut etre plus facile mais
+            //mon cerveau ne marchait plus.
 
-            //0, Y calculé en X, ou SizeY
-            var lastY = Math.Min(SizeY, Math.Max(0, (int)Math.Round((xToUse - theOrigin.X) * slope)));
+            var flipX = theOrigin.X > theTarget.X;
+            var flipy = theOrigin.Y > theTarget.Y;
 
-            var lastCoord = new FieldCoordinate(xToUse, lastY);
+            var newOrigin = new FieldCoordinate(
+                flipX ? SizeX - theOrigin.X : theOrigin.X,
+                flipy ? SizeY - theOrigin.Y : theOrigin.Y
+                );
 
-            return lastCoord;
+            var newTarget = new FieldCoordinate(
+                flipX ? SizeX - theTarget.X : theTarget.X,
+                flipy ? SizeY - theTarget.Y : theTarget.Y
+                );
+
+            double slope = (newTarget.Y - newOrigin.Y) / (double)(newTarget.X - newOrigin.X);
+
+            var intersectionAtX = new FieldCoordinate(SizeX-1, (int)Math.Round(newOrigin.Y + (SizeX - 1 - theOrigin.X) * slope));
+            var intersectionAtY = new FieldCoordinate((int)Math.Round((SizeY - 1) / slope + newOrigin.Y + newOrigin.X), SizeY-1);
+
+            var lastSquare = new FieldCoordinate(
+                    Math.Min(intersectionAtX.X, intersectionAtY.X),
+                    Math.Min(intersectionAtX.Y, intersectionAtY.Y)
+                );
+
+            var unFlipped = new FieldCoordinate(
+                flipX ? SizeX - lastSquare.X : lastSquare.X,
+                flipy ? SizeY - lastSquare.Y : lastSquare.Y
+                );
+
+            return unFlipped;
         }
     }
 }
