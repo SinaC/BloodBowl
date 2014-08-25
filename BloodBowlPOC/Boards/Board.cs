@@ -74,9 +74,6 @@ namespace BloodBowlPOC.Boards
                     throw new ArgumentException("Mode Slected Didn't make sense", "selectedAction"); 
             }
             
-
-
-
             Queue<ActionBase> actions = new Queue<ActionBase>();
             actions.Enqueue(startAction);
 
@@ -133,18 +130,18 @@ namespace BloodBowlPOC.Boards
             var flipy = theOrigin.Y > theTarget.Y;
 
             var newOrigin = new FieldCoordinate(
-                flipX ? SizeX - theOrigin.X : theOrigin.X,
-                flipy ? SizeY - theOrigin.Y : theOrigin.Y
+                flipX ? SizeX-1 - theOrigin.X : theOrigin.X,
+                flipy ? SizeY-1 - theOrigin.Y : theOrigin.Y
                 );
 
             var newTarget = new FieldCoordinate(
-                flipX ? SizeX - theTarget.X : theTarget.X,
-                flipy ? SizeY - theTarget.Y : theTarget.Y
+                flipX ? SizeX-1 - theTarget.X : theTarget.X,
+                flipy ? SizeY-1 - theTarget.Y : theTarget.Y
                 );
 
             double slope = (newTarget.Y - newOrigin.Y) / (double)(newTarget.X - newOrigin.X);
 
-            var intersectionAtX = new FieldCoordinate(SizeX-1, (int)Math.Round(newOrigin.Y + (SizeX - 1 - theOrigin.X) * slope));
+            var intersectionAtX = new FieldCoordinate(SizeX-1, (int)Math.Round(newOrigin.Y + (SizeX - 1 - newOrigin.X) * slope));
             var intersectionAtY = new FieldCoordinate((int)Math.Round((SizeY - 1) / slope + newOrigin.Y + newOrigin.X), SizeY-1);
 
             var lastSquare = new FieldCoordinate(
@@ -153,8 +150,8 @@ namespace BloodBowlPOC.Boards
                 );
 
             var unFlipped = new FieldCoordinate(
-                flipX ? SizeX - lastSquare.X : lastSquare.X,
-                flipy ? SizeY - lastSquare.Y : lastSquare.Y
+                flipX ? SizeX-1 - lastSquare.X : lastSquare.X,
+                flipy ? SizeY-1 - lastSquare.Y : lastSquare.Y
                 );
 
             return unFlipped;

@@ -17,5 +17,10 @@
         public static bool AreEqual(FieldCoordinate a, FieldCoordinate b){
             return a.X == b.X && a.Y == b.Y;
         }
+
+        public override string ToString()
+        {
+            return string.Format("[{0},{1}]", X,Y);
+        }
     }
 }
