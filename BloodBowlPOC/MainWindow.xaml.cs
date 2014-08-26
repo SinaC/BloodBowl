@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Input;
-using System.Windows.Media;
-using BloodBowlPOC.Actions;
 using BloodBowlPOC.Boards;
 using BloodBowlPOC.Utils;
+using BloodBowlPOC.ViewModels;
 
 namespace BloodBowlPOC
 {
@@ -23,123 +20,39 @@ namespace BloodBowlPOC
         public Border[,] Cells;
 
         public Board Board = new Board(SizeX, SizeY);
-
+        public ProbabilitiesViewModel ProbabilitiesViewModel { get; set; }
 
         public MainWindow()
         {
+            // TODO: add MainViewModel including OptionsViewModel and ProbabilitiesViewModel
             InitializeComponent();
 
-            Texts = new TextBlock[SizeX,SizeY];
-            Cells = new Border[SizeX,SizeY];
+            ProbabilitiesViewModel = new ProbabilitiesViewModel();
+            ProbabilitiesViewModel.Initialize(SizeX, SizeY, CellWidth, CellHeight);
 
-            for (int y = 0; y < SizeY; y++)
-                for (int x = 0; x < SizeX; x++)
-                {
-                    TextBlock txt = new TextBlock
-                    {
-                        Text = String.Empty,
-                        HorizontalAlignment = HorizontalAlignment.Center,
-                        Height = CellHeight,
-                        Width = CellWidth,
-                    };
-                    Texts[x, y] = txt;
+            ProbabilitiesView.DataContext = ProbabilitiesViewModel;
+            ProbabilitiesView.ProbabilityCellClicked += OnProbabilityCellClicked;
 
-                    Border border = new Border
-                    {
-                        BorderBrush = new SolidColorBrush(Colors.Black),
-                        BorderThickness = new Thickness(1),
-                        Child = txt,
-                        Height = CellHeight,
-                        Width = CellWidth,
-                    };
-                    border.MouseUp += CellOnMouseUp;
-                    Canvas.SetTop(border, y * CellHeight);
-                    Canvas.SetLeft(border, x * CellWidth);
-                    GridCanvas.Children.Add(border);
-                    Cells[x, y] = border;
-                }
-            GridCanvas.Width = CellWidth * SizeX;
-            GridCanvas.Height = CellHeight * SizeY;
-
-            MaxBouncesComboBox.SelectedIndex = 2;
+            MaxBouncesComboBox.SelectedIndex = 2; // TODO: move this to an new ViewModel/Views something like Options
 
             //Test(Board, SizeX/2, SizeY/2);
         }
-
-        private void CellOnMouseUp(object sender, MouseButtonEventArgs mouseButtonEventArgs)
+        
+        private void OnProbabilityCellClicked(int x, int y) // TODO: use command instead of event
         {
-            Border border = (sender as Border);
-            if (border != null)
-            {
-                // Get cell
-                Point relativePoint = border.TransformToAncestor(GridCanvas).Transform(new Point(0, 0));
-                int cellX = (int)(relativePoint.X / CellWidth);
-                int cellY = (int)(relativePoint.Y / CellHeight);
-                if (cellX >= 0 && cellX < SizeX && cellY >= 0 && cellY < SizeY)
-                {
-                    // Compute and display
-                    Board.Reset();
-                    ClearGrid();
-                    int maxBounces = int.Parse(MaxBouncesComboBox.SelectionBoxItem.ToString());
-                    var radioChecked = RadioKick.IsChecked.Value ? RadioKick.Content.ToString() : RadioPass.Content.ToString();
-                    Board.ComputeBounceProbabilities(new FieldCoordinate(cellX, cellY), maxBounces, radioChecked);
-                    DisplayProbabilities(Board);
-                    Cells[cellX, cellY].BorderBrush = new SolidColorBrush(Colors.White);
-                }
-            }
-        }
+            int maxBounces = int.Parse(MaxBouncesComboBox.SelectionBoxItem.ToString());
+            var radioChecked = (RadioKick.IsChecked.HasValue && RadioKick.IsChecked.Value) ? RadioKick.Content.ToString() : RadioPass.Content.ToString();
+            
+            Board.Reset();
+            Board.ComputeBounceProbabilities(new FieldCoordinate(x, y), maxBounces, radioChecked);
 
-        private void ClearGrid()
-        {
-            for (int y = 0; y < SizeY; y++)
-                for (int x = 0; x < SizeX; x++)
-                {
-                    Texts[x, y].Text = String.Empty;
-                    Cells[x, y].Background = new SolidColorBrush(Colors.White);
-                    Cells[x, y].BorderBrush = new SolidColorBrush(Colors.Black);
-                }
+            DisplayProbabilities(Board);
         }
 
         private void DisplayProbabilities(Board board)
         {
-            // Get min/max/sum
-            double min = Double.MaxValue;
-            double max = Double.MinValue;
-            double sum = 0;
-            for (int y = 0; y < SizeY; y++)
-                for (int x = 0; x < SizeX; x++)
-                {
-                    double probability = board.Probabilities[x,y];
-                    if (probability > 0)
-                    {
-                        sum += probability;
-                        if (probability < min)
-                            min = probability;
-                        if (probability > max)
-                            max = probability;
-                    }
-                }
-            System.Diagnostics.Debug.WriteLine("Sum:{0} Min:{1} Max:{2}", sum, min, max);
-            Status.Text = String.Format("Sum:{0:0.####} Min:{1:0.####} Max:{2:0.####}", sum * 100, min * 100, max * 100);
-            bool uniqueValue = Math.Abs(min - max) < 0.0000001; // if min == max -> display in green
-            for (int y = 0; y < SizeY; y++)
-                for (int x = 0; x < SizeX; x++)
-                {
-                    double probability = board.Probabilities[x, y];
-                    if (probability > 0)
-                    {
-                        Texts[x, y].Text = 100.0 * probability < 0.01 ? "<0.01" : String.Format("{0:0.##}", 100.0 * probability);
-                        Texts[x, y].ToolTip = String.Format("{0}", 100.0 * probability);
-                        if (uniqueValue)
-                            Cells[x, y].Background = new SolidColorBrush(Color.FromRgb(0, 0xFF, 0));
-                        else
-                        {
-                            double red = 255 - (probability - min) * (255 - 0) / (max - min);
-                            double green = 0 + (probability - min) * (255 - 0) / (max - min);
-                            Cells[x, y].Background = new SolidColorBrush(Color.FromRgb((byte)red, (byte)green, 0));
-                        }
-                    }
-                }
+            ProbabilitiesViewModel.Display(board);
+            Status.Text = String.Format("Sum:{0:0.####} Min:{1:0.####} Max:{2:0.####}", ProbabilitiesViewModel.Sum * 100, ProbabilitiesViewModel.Min * 100, ProbabilitiesViewModel.Max * 100);
         }
     }
 }

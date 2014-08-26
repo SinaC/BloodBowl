@@ -1,0 +1,70 @@
+﻿<UserControl x:Class="BloodBowlPOC.Views.ProbabilitiesView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:viewModels="clr-namespace:BloodBowlPOC.ViewModels"
+             xmlns:converters="clr-namespace:BloodBowlPOC.Views.Converters" 
+             mc:Ignorable="d" 
+             d:DataContext="{d:DesignInstance viewModels:ProbabilitiesViewModelDesignData,IsDesignTimeCreatable=True}"
+             Width="{Binding TotalWidth}" Height="{Binding TotalHeight}"
+             d:DesignHeight="300" d:DesignWidth="300">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <converters:ProbabilityToBrushConverter x:Key="ProbabilityToBrushConverter"/>
+            <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <Grid>
+        <ItemsControl ItemsSource="{Binding Path=Probabilities}">
+            <!--<ItemsControl.ItemContainerStyle>
+                <Style TargetType="ContentPresenter">
+                    <Style.Setters>
+                        <Setter Property="Panel.ZIndex" Value="{Binding Z}"/>
+                    </Style.Setters>
+                </Style>
+            </ItemsControl.ItemContainerStyle>-->
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Canvas>
+                        <Border Width="{Binding Width}" Height="{Binding Height}" 
+                                Canvas.Left="{Binding Path=LocationX}" Canvas.Top="{Binding Path=LocationY}"
+                                BorderThickness="1" BorderBrush="Black"
+                                MouseUp="Border_MouseUp">
+                            <Border.Style>
+                                <Style TargetType="{x:Type Border}">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding NoColor}" Value="True">
+                                            <Setter Property="Background" Value="Green"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding Visible}" Value="False">
+                                            <Setter Property="Background" Value="White"/>
+                                        </DataTrigger>
+                                        <MultiDataTrigger>
+                                            <MultiDataTrigger.Conditions>
+                                                <Condition Binding="{Binding NoColor}" Value="False"/>
+                                                <Condition Binding="{Binding Visible}" Value="True"/>
+                                            </MultiDataTrigger.Conditions>
+                                            <Setter Property="Background">
+                                                <Setter.Value>
+                                                    <MultiBinding Converter="{StaticResource ProbabilityToBrushConverter}">
+                                                        <Binding Path="Value"/>
+                                                        <Binding Path="DataContext.Min" RelativeSource="{RelativeSource AncestorType={x:Type UserControl}}"/>
+                                                        <Binding Path="DataContext.Max" RelativeSource="{RelativeSource AncestorType={x:Type UserControl}}"/>
+                                                    </MultiBinding>
+                                                </Setter.Value>
+                                            </Setter>
+                                        </MultiDataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Border.Style>
+                            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" 
+                                       Visibility="{Binding Visible, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                       Text="{Binding DisplayValue}"/>
+                        </Border>
+                    </Canvas>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+    </Grid>
+</UserControl>
