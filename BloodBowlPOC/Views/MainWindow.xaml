@@ -21,6 +21,7 @@
         <views:ProbabilitiesView Grid.Row="1" HorizontalAlignment="Left"
                                  DataContext="{Binding ProbabilitiesViewModel}"/>
         
-        <TextBlock x:Name="Status" Grid.Row="2"/>
+        <TextBlock Grid.Row="2"
+                   Text="{Binding Status}"/>
     </Grid>
 </Window>

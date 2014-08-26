@@ -1,11 +1,12 @@
-﻿using BloodBowlPOC.Boards;
+﻿using System;
+using BloodBowlPOC.Boards;
 using BloodBowlPOC.MVVM;
 using BloodBowlPOC.Messages;
 using BloodBowlPOC.Utils;
 
 namespace BloodBowlPOC.ViewModels
 {
-    public class MainViewModel
+    public class MainViewModel : ViewModelBase
     {
         public static readonly double CellWidth = 32;
         public static readonly double CellHeight = 24;
@@ -17,6 +18,13 @@ namespace BloodBowlPOC.ViewModels
 
         public Board Board = new Board(SizeX, SizeY);
 
+        private string _status;
+        public string Status
+        {
+            get { return _status; }
+            set { Set(() => Status, ref _status, value); }
+        }
+        
         public MainViewModel()
         {
             ProbabilitiesViewModel = new ProbabilitiesViewModel();
@@ -45,7 +53,7 @@ namespace BloodBowlPOC.ViewModels
         private void DisplayProbabilities(Board board)
         {
             ProbabilitiesViewModel.Display(board);
-            //Status.Text = String.Format("Sum:{0:0.####} Min:{1:0.####} Max:{2:0.####}", ProbabilitiesViewModel.Sum * 100, ProbabilitiesViewModel.Min * 100, ProbabilitiesViewModel.Max * 100);
+            Status = String.Format("Sum:{0:0.####} Min:{1:0.####} Max:{2:0.####}", ProbabilitiesViewModel.Sum * 100, ProbabilitiesViewModel.Min * 100, ProbabilitiesViewModel.Max * 100);
         }
     }
 
