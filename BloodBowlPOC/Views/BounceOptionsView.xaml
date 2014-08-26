@@ -1,0 +1,36 @@
+﻿<UserControl x:Class="BloodBowlPOC.Views.BounceOptionsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:viewModels="clr-namespace:BloodBowlPOC.ViewModels"
+             xmlns:converters="clr-namespace:BloodBowlPOC.Views.Converters" 
+             mc:Ignorable="d" 
+             d:DataContext="{d:DesignInstance viewModels:BounceOptionsViewModelDesignData, IsDesignTimeCreatable=True}">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <converters:EnumToBooleanConverter x:Key="EnumToBooleanConverter"/>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+        <StackPanel Grid.Column="0" Orientation="Horizontal">
+            <TextBlock Text="Max bounces:"/>
+            <ComboBox Width="40"
+                      SelectedItem="{Binding SelectedBounceCount}"
+                      ItemsSource="{Binding BounceCountList}"/>
+        </StackPanel>
+        <RadioButton Grid.Column="1" GroupName="Mode" Margin="20,0,0,0"
+                     IsChecked="{Binding SelectedMode, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static viewModels:Modes.Pass}}">
+            <TextBlock Text="Pass"/>
+        </RadioButton>
+        <RadioButton Grid.Column="2" GroupName="Mode" Margin="10,0,0,0"
+                     IsChecked="{Binding SelectedMode, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static viewModels:Modes.KickOff}}">
+            <TextBlock Text="KickOff"/>
+        </RadioButton>
+    </Grid>
+</UserControl>

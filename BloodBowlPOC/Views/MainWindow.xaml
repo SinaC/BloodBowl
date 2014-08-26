@@ -1,0 +1,26 @@
+﻿<Window x:Class="BloodBowlPOC.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:views="clr-namespace:BloodBowlPOC.Views" 
+        xmlns:viewModels="clr-namespace:BloodBowlPOC.ViewModels"
+        mc:Ignorable="d" 
+        d:DataContext="{d:DesignInstance viewModels:MainViewModelDesignData, IsDesignTimeCreatable=True}"
+        Title="MainWindow" Height="800" Width="600">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        
+        <views:BounceOptionsView Grid.Row="0" HorizontalAlignment="Left"
+                                 DataContext="{Binding BounceOptionsViewModel}"/>
+
+        <views:ProbabilitiesView Grid.Row="1" HorizontalAlignment="Left"
+                                 DataContext="{Binding ProbabilitiesViewModel}"/>
+        
+        <TextBlock x:Name="Status" Grid.Row="2"/>
+    </Grid>
+</Window>

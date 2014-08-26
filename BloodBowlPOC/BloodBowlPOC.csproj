@@ -57,19 +57,27 @@
     </ApplicationDefinition>
     <Compile Include="Actions\ThrowInAction.cs" />
     <Compile Include="Actions\ScatterAction.cs" />
+    <Compile Include="Messages\CellSelectedMessage.cs" />
+    <Compile Include="MVVM\Mediator.cs" />
     <Compile Include="MVVM\ObservableObject.cs" />
     <Compile Include="MVVM\RelayCommand.cs" />
     <Compile Include="Utils\Dice.cs" />
     <Compile Include="Utils\FieldCoordinate.cs" />
     <Compile Include="Utils\MonadExtensions.cs" />
+    <Compile Include="ViewModels\BounceOptionsViewModel.cs" />
+    <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\ProbabilitiesViewModel.cs" />
     <Compile Include="ViewModels\ProbabilityItem.cs" />
     <Compile Include="ViewModels\ViewModelBase.cs" />
+    <Compile Include="Views\BounceOptionsView.xaml.cs">
+      <DependentUpon>BounceOptionsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Converters\EnumToBooleanConverter.cs" />
     <Compile Include="Views\Converters\ProbabilityToBrushConverter.cs" />
     <Compile Include="Views\ProbabilitiesView.xaml.cs">
       <DependentUpon>ProbabilitiesView.xaml</DependentUpon>
     </Compile>
-    <Page Include="MainWindow.xaml">
+    <Page Include="Views\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -82,10 +90,14 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Boards\Board.cs" />
-    <Compile Include="MainWindow.xaml.cs">
+    <Compile Include="Views\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Views\BounceOptionsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\ProbabilitiesView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
