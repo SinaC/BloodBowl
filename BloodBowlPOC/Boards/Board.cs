@@ -4,7 +4,7 @@ using BloodBowlPOC.Utils;
 using System;
 namespace BloodBowlPOC.Boards
 {
-    public class Board
+    public class Board : BloodBowlPOC.Boards.IBoard
     {
         //Upper Left is 0,0                N, NE,  E, SE,  S, SW,  W, NW
         public static int[] DirectionsX = { 0, 1, 1, 1, 0, -1, -1, -1 };
