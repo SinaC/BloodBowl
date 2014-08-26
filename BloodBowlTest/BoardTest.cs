@@ -59,7 +59,6 @@ namespace BloodBowlTest
 
             var result = DoCall(From, To);
 
-
             Assert.IsTrue(FieldCoordinate.AreEqual(Expected, result)
                 , String.Format("Expected {0}, got {1}", Expected, result));
         }
@@ -145,6 +144,20 @@ namespace BloodBowlTest
             FieldCoordinate from = new FieldCoordinate(3, 1);
             FieldCoordinate to = new FieldCoordinate(4, -4);
             FieldCoordinate expectedResult = new FieldCoordinate(3, 0);
+
+            FieldCoordinate result = theBoard.GetLastInboundOnPath(from, to);
+
+            Assert.IsTrue(FieldCoordinate.AreEqual(expectedResult, result)
+                , String.Format("Expected {0}, got {1}", expectedResult, result));
+        }
+        [TestMethod]
+        public void GetLastInboundOnPathTest_OutOfBounds5()
+        {
+            Board theBoard = new Board(6, 6);
+
+            FieldCoordinate from = new FieldCoordinate(0, 0);
+            FieldCoordinate to = new FieldCoordinate(10, -2);
+            FieldCoordinate expectedResult = new FieldCoordinate(5, 0);
 
             FieldCoordinate result = theBoard.GetLastInboundOnPath(from, to);
 

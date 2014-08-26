@@ -123,64 +123,63 @@ namespace BloodBowlPOC.Boards
                 return new FieldCoordinate(Math.Max(0, Math.Min(theTarget.X, SizeX-1)), theOrigin.Y);
             }
 
-            //// C'est pas plus simple ca ? De plus, certains unit tests ne passent pas avec ton code
+            // ca a l'air mieux mais j'ai qd meme pu ecrire un unit test qui passe pas.
 
-            //int borderX = Math.Min(Math.Max(0, theTarget.X), SizeX - 1);
-            //int borderY = Math.Min(Math.Max(0, theTarget.Y), SizeY - 1);
+            int borderX = Math.Min(Math.Max(0, theTarget.X), SizeX - 1);
+            int borderY = Math.Min(Math.Max(0, theTarget.Y), SizeY - 1);
 
-            //if (borderX == theTarget.X && borderY == theTarget.Y) // on sort pas -> pas de calcul
-            //    return theTarget;
+            if (borderX == theTarget.X && borderY == theTarget.Y) // on sort pas -> pas de calcul
+                return theTarget;
 
-            //int inBoundX;
-            //int inBoundY;
+            int inBoundX;
+            int inBoundY;
 
-            //if (Math.Abs(theTarget.X - borderX) > Math.Abs(theTarget.Y - borderY)) // On sort en x ou y ?
-            //{
-            //    double slope = (double)(theTarget.Y - theOrigin.Y) / (theTarget.X - theOrigin.X);
-            //    inBoundX = borderX;
-            //    inBoundY = (int)(theOrigin.Y + slope * (borderX - theOrigin.X));
-            //}
-            //else
-            //{
-            //    double slope = (double)(theTarget.X - theOrigin.X) / (theTarget.Y - theOrigin.Y);
-            //    inBoundX = (int)(theOrigin.X + slope * (borderY - theOrigin.Y));
-            //    inBoundY = borderY;
-            //}
+            if (Math.Abs(theTarget.X - borderX) > Math.Abs(theTarget.Y - borderY)) // On sort en x ou y ?
+            {
+                double slope = (double)(theTarget.Y - theOrigin.Y) / (theTarget.X - theOrigin.X);
+                inBoundX = borderX;
+                inBoundY = (int)(theOrigin.Y + slope * (borderX - theOrigin.X));
+            }
+            else {
+                double slope = (double)(theTarget.X - theOrigin.X) / (theTarget.Y - theOrigin.Y);
+                inBoundX = (int)(theOrigin.X + slope * (borderY - theOrigin.Y));
+                inBoundY = borderY;
+            }
 
-            //return new FieldCoordinate(inBoundX, inBoundY);
+            return new FieldCoordinate(inBoundX, inBoundY);
 
             //On flip les axes pour aller toujours en positif dans les 2 axes, ya peut etre plus facile mais
             //mon cerveau ne marchait plus.
 
-            var flipX = theOrigin.X > theTarget.X;
-            var flipy = theOrigin.Y > theTarget.Y;
+            //var flipX = theOrigin.X > theTarget.X;
+            //var flipy = theOrigin.Y > theTarget.Y;
 
-            var newOrigin = new FieldCoordinate(
-                flipX ? SizeX-1 - theOrigin.X : theOrigin.X,
-                flipy ? SizeY-1 - theOrigin.Y : theOrigin.Y
-                );
+            //var newOrigin = new FieldCoordinate(
+            //    flipX ? SizeX - 1 - theOrigin.X : theOrigin.X,
+            //    flipy ? SizeY - 1 - theOrigin.Y : theOrigin.Y
+            //    );
 
-            var newTarget = new FieldCoordinate(
-                flipX ? SizeX-1 - theTarget.X : theTarget.X,
-                flipy ? SizeY-1 - theTarget.Y : theTarget.Y
-                );
+            //var newTarget = new FieldCoordinate(
+            //    flipX ? SizeX - 1 - theTarget.X : theTarget.X,
+            //    flipy ? SizeY - 1 - theTarget.Y : theTarget.Y
+            //    );
 
-            double slope = (newTarget.Y - newOrigin.Y) / (double)(newTarget.X - newOrigin.X);
+            //double slope = (newTarget.Y - newOrigin.Y) / (double)(newTarget.X - newOrigin.X);
 
-            var intersectionAtX = new FieldCoordinate(SizeX-1, (int)Math.Round(newOrigin.Y + (SizeX - 1 - newOrigin.X) * slope));
-            var intersectionAtY = new FieldCoordinate((int)Math.Round((SizeY - 1 - newOrigin.Y) / slope + newOrigin.X), SizeY - 1);
+            //var intersectionAtX = new FieldCoordinate(SizeX - 1, (int)Math.Round(newOrigin.Y + (SizeX - 1 - newOrigin.X) * slope));
+            //var intersectionAtY = new FieldCoordinate((int)Math.Round((SizeY - 1 - newOrigin.Y) / slope + newOrigin.X), SizeY - 1);
 
-            var lastSquare = new FieldCoordinate(
-                    Math.Min(intersectionAtX.X, intersectionAtY.X),
-                    Math.Min(intersectionAtX.Y, intersectionAtY.Y)
-                );
+            //var lastSquare = new FieldCoordinate(
+            //        Math.Min(intersectionAtX.X, intersectionAtY.X),
+            //        Math.Min(intersectionAtX.Y, intersectionAtY.Y)
+            //    );
 
-            var unFlipped = new FieldCoordinate(
-                flipX ? SizeX-1 - lastSquare.X : lastSquare.X,
-                flipy ? SizeY-1 - lastSquare.Y : lastSquare.Y
-                );
+            //var unFlipped = new FieldCoordinate(
+            //    flipX ? SizeX - 1 - lastSquare.X : lastSquare.X,
+            //    flipy ? SizeY - 1 - lastSquare.Y : lastSquare.Y
+            //    );
 
-            return unFlipped;
+            //return unFlipped;
         }
     }
 }
