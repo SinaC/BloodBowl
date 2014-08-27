@@ -1,9 +1,7 @@
-﻿using System.Collections.Generic;
-using BloodBowlPOC.Boards;
+﻿using BloodBowlPOC.Boards;
 using BloodBowlPOC.Utils;
-using BloodBowlPOC.Actions;
 
-namespace BloodBowlPOC
+namespace BloodBowlPOC.Actions
 {
     // Scatter must finish all 3 repetitions before deciding if a throw-in happen
     // and does not offer catch opportunities until after all scatters are done.

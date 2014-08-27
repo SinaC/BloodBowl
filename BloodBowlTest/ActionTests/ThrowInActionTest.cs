@@ -1,12 +1,9 @@
-﻿using BloodBowlPOC.Actions;
+﻿using System.Collections.Generic;
+using System.Linq;
+using BloodBowlPOC.Actions;
 using BloodBowlPOC.Boards;
 using BloodBowlPOC.Utils;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BloodBowlTest.ActionTests
 {
@@ -50,15 +47,15 @@ namespace BloodBowlTest.ActionTests
             List<ActionBase> subActions = bounce.Perform(TestBoard);
 
             Assert.AreEqual(33, subActions.Count);
-            Assert.AreEqual(33, subActions.OfType<BounceAction>().ToList().Count);
+            Assert.AreEqual(33, subActions.OfType<BounceAction>().Count());
 
-            var bounceActions = subActions.Cast<BounceAction>();
+            var bounceActions = subActions.Cast<BounceAction>().ToList();
 
             Assert.IsTrue(bounceActions.GroupBy(x => x.Coordinate.X).All(x => x.Count(y => true) == 3));
-            Assert.IsTrue(bounceActions.GroupBy(x => x.Coordinate.X).All(x => x.ToList().Count == 3));
+            Assert.IsTrue(bounceActions.GroupBy(x => x.Coordinate.X).All(x => x.Count() == 3));
             Assert.AreEqual(11, bounceActions.Max(x => x.Coordinate.X));
-            Assert.AreEqual(11, bounceActions.Where(x => x.Coordinate.Y == lastKnownInbound.Y).ToList().Count);
-            Assert.AreEqual(22, bounceActions.Select(x => x.Coordinate.Y).Where(x => x != lastKnownInbound.Y).Distinct().ToList().Count);
+            Assert.AreEqual(11, bounceActions.Count(x => x.Coordinate.Y == lastKnownInbound.Y));
+            Assert.AreEqual(22, bounceActions.Select(x => x.Coordinate.Y).Where(x => x != lastKnownInbound.Y).Distinct().Count());
         }
 
         [TestMethod]
@@ -78,10 +75,10 @@ namespace BloodBowlTest.ActionTests
             List<ActionBase> subActions = bounce.Perform(TestBoard);
 
             Assert.AreEqual(33, subActions.Count);
-            Assert.AreEqual(28, subActions.OfType<BounceAction>().ToList().Count);
-            Assert.AreEqual(5, subActions.OfType<ThrowInAction>().ToList().Count);
+            Assert.AreEqual(28, subActions.OfType<BounceAction>().Count());
+            Assert.AreEqual(5, subActions.OfType<ThrowInAction>().Count());
 
-            var throwIns = subActions.OfType<ThrowInAction>();
+            var throwIns = subActions.OfType<ThrowInAction>().ToList();
             var expectedLastIB = new FieldCoordinate(6,0);
 
             Assert.AreEqual(5, throwIns.Count(x => !TestBoard.IsInbound(x.Coordinate)));

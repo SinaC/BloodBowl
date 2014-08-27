@@ -1,5 +1,5 @@
-﻿using BloodBowlPOC.Utils;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using BloodBowlPOC.Utils;
 
 namespace BloodBowlPOC.Actions
 {

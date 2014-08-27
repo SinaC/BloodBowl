@@ -7,7 +7,7 @@ namespace BloodBowlPOC.Views.Converters
     {
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
-            return value.Equals(parameter);
+            return ((Enum)value).HasFlag((Enum)parameter);
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
@@ -15,17 +15,4 @@ namespace BloodBowlPOC.Views.Converters
             return value.Equals(true) ? parameter : Binding.DoNothing;
         }
     }
-
-    //public class EnumToBooleanConverter : IValueConverter
-    //{
-    //    public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
-    //    {
-    //        return ((Enum)value).HasFlag((Enum)parameter);
-    //    }
-
-    //    public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
-    //    {
-    //        return value.Equals(true) ? parameter : Binding.DoNothing;
-    //    }
-    //}
 }

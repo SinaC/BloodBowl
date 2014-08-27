@@ -1,7 +1,6 @@
-﻿using BloodBowlPOC.Utils;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using BloodBowlPOC.Utils;
 using BloodBowlPOC.Boards;
-using System.Linq;
 
 namespace BloodBowlPOC.Actions
 {

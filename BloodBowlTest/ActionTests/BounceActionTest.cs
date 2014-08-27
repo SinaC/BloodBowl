@@ -1,12 +1,9 @@
-﻿using BloodBowlPOC.Actions;
+﻿using System.Collections.Generic;
+using System.Linq;
+using BloodBowlPOC.Actions;
 using BloodBowlPOC.Boards;
 using BloodBowlPOC.Utils;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BloodBowlTest.ActionTests
 {
@@ -70,7 +67,7 @@ namespace BloodBowlTest.ActionTests
             List<ActionBase> subActions = bounce.Perform(TestBoard);
 
             Assert.AreEqual(1, subActions.Count);
-            Assert.AreEqual(1, subActions.OfType<ThrowInAction>().ToList().Count);
+            Assert.AreEqual(1, subActions.OfType<ThrowInAction>().Count());
 
             var oobAction = subActions[0] as ThrowInAction;
             var expectedCoord = new FieldCoordinate(-1,2);

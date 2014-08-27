@@ -1,6 +1,18 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Rows>
   <Row>
+    <Width>4</Width>
+    <Height>4</Height>
+    <fromX>3</fromX>
+    <fromY>3</fromY>
+    <ToX>2</ToX>
+    <ToY>2</ToY>
+    <ExpectedX>2</ExpectedX>
+    <ExpectedY>2</ExpectedY>
+  </Row>
+  <Row>
+    <Width>4</Width>
+    <Height>4</Height>
     <fromX>0</fromX>
     <fromY>0</fromY>
     <ToX>4</ToX>
@@ -9,6 +21,8 @@
     <ExpectedY>3</ExpectedY>
   </Row>
   <Row>
+    <Width>4</Width>
+    <Height>4</Height>
     <fromX>3</fromX>
     <fromY>3</fromY>
     <ToX>-1</ToX>
@@ -17,6 +31,8 @@
     <ExpectedY>0</ExpectedY>
   </Row>
   <Row>
+    <Width>4</Width>
+    <Height>4</Height>
     <fromX>1</fromX>
     <fromY>2</fromY>
     <ToX>1</ToX>
@@ -25,6 +41,8 @@
     <ExpectedY>3</ExpectedY>
   </Row>
   <Row>
+    <Width>4</Width>
+    <Height>4</Height>
     <fromX>1</fromX>
     <fromY>1</fromY>
     <ToX>10</ToX>
@@ -33,6 +51,8 @@
     <ExpectedY>1</ExpectedY>
   </Row>
   <Row>
+    <Width>4</Width>
+    <Height>4</Height>
     <fromX>2</fromX>
     <fromY>1</fromY>
     <ToX>4</ToX>
@@ -41,6 +61,8 @@
     <ExpectedY>2</ExpectedY>
   </Row>
   <Row>
+    <Width>4</Width>
+    <Height>4</Height>
     <fromX>1</fromX>
     <fromY>3</fromY>
     <ToX>-1</ToX>
@@ -49,11 +71,53 @@
     <ExpectedY>2</ExpectedY>
   </Row>
   <Row>
+    <Width>4</Width>
+    <Height>4</Height>
     <fromX>3</fromX>
     <fromY>2</fromY>
     <ToX>2</ToX>
     <ToY>-1</ToY>
     <ExpectedX>2</ExpectedX>
+    <ExpectedY>0</ExpectedY>
+  </Row>
+  <Row>
+    <Width>6</Width>
+    <Height>6</Height>
+    <fromX>2</fromX>
+    <fromY>3</fromY>
+    <ToX>6</ToX>
+    <ToY>0</ToY>
+    <ExpectedX>5</ExpectedX>
+    <ExpectedY>0</ExpectedY>
+  </Row>
+  <Row>
+    <Width>4</Width>
+    <Height>4</Height>
+    <fromX>3</fromX>
+    <fromY>1</fromY>
+    <ToX>5</ToX>
+    <ToY>-1</ToY>
+    <ExpectedX>3</ExpectedX>
+    <ExpectedY>1</ExpectedY>
+  </Row>
+  <Row>
+    <Width>4</Width>
+    <Height>4</Height>
+    <fromX>3</fromX>
+    <fromY>1</fromY>
+    <ToX>4</ToX>
+    <ToY>-4</ToY>
+    <ExpectedX>3</ExpectedX>
+    <ExpectedY>0</ExpectedY>
+  </Row>
+  <Row>
+    <Width>6</Width>
+    <Height>6</Height>
+    <fromX>0</fromX>
+    <fromY>0</fromY>
+    <ToX>10</ToX>
+    <ToY>-2</ToY>
+    <ExpectedX>5</ExpectedX>
     <ExpectedY>0</ExpectedY>
   </Row>
 </Rows>

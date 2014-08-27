@@ -1,10 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using BloodBowlPOC.Actions;
 using BloodBowlPOC.Utils;
-using System;
+
 namespace BloodBowlPOC.Boards
 {
-    public class Board : BloodBowlPOC.Boards.IBoard
+    public class Board : IBoard
     {
         //Upper Left is 0,0                N, NE,  E, SE,  S, SW,  W, NW
         public static int[] DirectionsX = { 0, 1, 1, 1, 0, -1, -1, -1 };
@@ -53,7 +54,7 @@ namespace BloodBowlPOC.Boards
 
         public void ComputeBounceProbabilities(FieldCoordinate point, int maxBounces, string selectedAction)
         {
-            ActionBase startAction = null;
+            ActionBase startAction;
             // Throw the ball
             switch (selectedAction) {
                 case "Pass":
@@ -71,7 +72,7 @@ namespace BloodBowlPOC.Boards
                     };
                     break;
                 default:
-                    throw new ArgumentException("Mode Slected Didn't make sense", "selectedAction"); 
+                    throw new ArgumentException(@"Mode selected didn't make sense", "selectedAction"); 
             }
             
             Queue<ActionBase> actions = new Queue<ActionBase>();
@@ -92,17 +93,16 @@ namespace BloodBowlPOC.Boards
 
         public FieldCoordinate[] GetThrowinRuler(FieldCoordinate coordinate)
         {
-            if(coordinate.X<0){
+            if(coordinate.X<0)
                 return WestThrowIn;
-            }else if (coordinate.X >= SizeX) {
+           if (coordinate.X >= SizeX)
                 return EastThrowIn;
-            }else if (coordinate.Y < 0) { //the Above 2 prioritize the sieline
+            if (coordinate.Y < 0) //the Above 2 prioritize the sieline
                 return NorthThrowIn;
-            }else if (coordinate.Y >= SizeY) {
+            if (coordinate.Y >= SizeY)
                 return SouthThrowIn;
-            }
 
-            throw new ArgumentException("Coordinate didn't make sense.","coordinate");
+            throw new ArgumentException(@"Coordinate didn't make sense.","coordinate");
         }
 
         //TODO: make a boardUtility class of some sort maybe?
