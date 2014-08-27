@@ -16,51 +16,78 @@ namespace BloodBowlTest.ActionTests
         public Board TestBoard { get; set; }
 
         [TestMethod]
-        public void TestPerformInBound()
+        public void TestThrowInDoNothing()
         {
             TestBoard = new Board(10, 10);
 
             var initalSquare = new FieldCoordinate(3, 3);
 
-            var bounce = new BounceAction {
-                BounceLeft = 1,
+            var bounce = new ThrowInAction{
                 Coordinate = initalSquare,
+                LastInboundSquare = initalSquare,
                 Probability = 1
             };
+
             List<ActionBase> subActions = bounce.Perform(TestBoard);
 
-            Assert.AreEqual(8, subActions.Count);
-            Assert.IsTrue(subActions.All(x => x.GetType() == typeof(BounceAction)));
-            Assert.IsTrue(subActions.All(x => (x as BounceAction).Probability == 1 / 8.0));
-            Assert.IsTrue(subActions.All(x => (x as BounceAction).BounceLeft == 0));
-            Assert.IsTrue(subActions.All(x =>
-                FieldCoordinate.AreEqual(initalSquare,(x as BounceAction).LastKnownInBound )
-                ));
+            Assert.AreEqual(0, subActions.Count);
         }
 
         [TestMethod]
-        public void TestPerformOOB()
+        public void TestThrowinNormal()
         {
-            TestBoard = new Board(5,5);
-            
-            var bounce = new BounceAction {
-                BounceLeft = 1,
-                Coordinate = new FieldCoordinate(-1, 2),
-                LastKnownInBound=new FieldCoordinate(0,2),
+            TestBoard = new Board(15, 31); //Assez grand pour que tout soit inbound
+
+            var initalSquare = new FieldCoordinate(-1, 15);
+            var lastKnownInbound = new FieldCoordinate(0, 15);
+
+            var bounce = new ThrowInAction {
+                Coordinate = initalSquare,
+                LastInboundSquare = lastKnownInbound,
                 Probability = 1
             };
+
             List<ActionBase> subActions = bounce.Perform(TestBoard);
 
-            Assert.AreEqual(1, subActions.Count);
-            Assert.AreEqual(1, subActions.OfType<ThrowInAction>().ToList().Count);
+            Assert.AreEqual(33, subActions.Count);
+            Assert.AreEqual(33, subActions.OfType<BounceAction>().ToList().Count);
 
-            var oobAction = subActions[0] as ThrowInAction;
-            var expectedCoord = new FieldCoordinate(-1,2);
-            var expectedLastIB = new FieldCoordinate(0,2);
+            var bounceActions = subActions.Cast<BounceAction>();
 
-            Assert.IsTrue(FieldCoordinate.AreEqual(expectedCoord, oobAction.Coordinate));
-            Assert.IsTrue(FieldCoordinate.AreEqual(expectedLastIB, oobAction.LastInboundSquare));
-
+            Assert.IsTrue(bounceActions.GroupBy(x => x.Coordinate.X).All(x => x.Count(y => true) == 3));
+            Assert.IsTrue(bounceActions.GroupBy(x => x.Coordinate.X).All(x => x.ToList().Count == 3));
+            Assert.AreEqual(11, bounceActions.Max(x => x.Coordinate.X));
+            Assert.AreEqual(11, bounceActions.Where(x => x.Coordinate.Y == lastKnownInbound.Y).ToList().Count);
+            Assert.AreEqual(22, bounceActions.Select(x => x.Coordinate.Y).Where(x => x != lastKnownInbound.Y).Distinct().ToList().Count);
         }
+
+        [TestMethod]
+        public void TestThrowinWithOOB()
+        {
+            TestBoard = new Board(15, 31); //Assez grand pour que tout soit inbound
+
+            var initalSquare = new FieldCoordinate(-1, 6);
+            var lastKnownInbound = new FieldCoordinate(0, 6);
+
+            var bounce = new ThrowInAction {
+                Coordinate = initalSquare,
+                LastInboundSquare = lastKnownInbound,
+                Probability = 1
+            };
+
+            List<ActionBase> subActions = bounce.Perform(TestBoard);
+
+            Assert.AreEqual(33, subActions.Count);
+            Assert.AreEqual(28, subActions.OfType<BounceAction>().ToList().Count);
+            Assert.AreEqual(5, subActions.OfType<ThrowInAction>().ToList().Count);
+
+            var throwIns = subActions.OfType<ThrowInAction>();
+            var expectedLastIB = new FieldCoordinate(6,0);
+
+            Assert.AreEqual(5, throwIns.Count(x => !TestBoard.IsInbound(x.Coordinate)));
+            Assert.IsTrue(throwIns.Where(x => !TestBoard.IsInbound(x.Coordinate))
+                        .All(x=> FieldCoordinate.AreEqual(x.LastInboundSquare,expectedLastIB)));
+        }
+
     }
 }

@@ -39,23 +39,23 @@ namespace BloodBowlPOC.Actions
 
                 for (int direction = 0; direction < 3; direction++) {
                     for (int distance = 2; distance < 13; distance++) {
-                        var target = Coordinate = new FieldCoordinate(LastInboundSquare.X + (distance-1) * ruler[direction].X,
+                        var target = new FieldCoordinate(LastInboundSquare.X + (distance-1) * ruler[direction].X,
                                                                  LastInboundSquare.Y + (distance-1) * ruler[direction].Y
                                                             );
                         if( board.EpsilonProba > Probability * DistanceProbabilities[distance] / 3.0 ){
-                            return subActions;
+                            continue;
                         }
 
                         if (!board.IsInbound(target)) {
                             //  if throwin is out of bound, compute new last inbound square
                             //  throw in again
-                            LastInboundSquare = StepByStepOOB(LastInboundSquare, target, ruler[direction], board);
+                            var last = StepByStepOOB(LastInboundSquare, target, ruler[direction], board);
                             //TODO: Should be replaced by correct implementation of below function
                             //LastInboundSquare = board.GetLastInboundOnPath(LastInboundSquare, target);
 
                             ThrowInAction subAction = new ThrowInAction {
                                 Coordinate = target,
-                                LastInboundSquare = LastInboundSquare,
+                                LastInboundSquare = last,
                                 Probability = Probability * DistanceProbabilities[distance] / 3.0
                             };
 
@@ -66,6 +66,7 @@ namespace BloodBowlPOC.Actions
                         else {
                             BounceAction subAction = new BounceAction {
                                 Coordinate = target,
+                                LastKnownInBound = target,
                                 BounceLeft = 1,
                                 Probability = Probability * DistanceProbabilities[distance] / 3.0
                             };
