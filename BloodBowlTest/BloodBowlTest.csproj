@@ -60,6 +60,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="ActionTests\KickOffActionTest.cs" />
     <Compile Include="ActionTests\ThrowInActionTest.cs" />
     <Compile Include="ActionTests\BounceActionTest.cs" />
     <Compile Include="BoardTest.cs" />

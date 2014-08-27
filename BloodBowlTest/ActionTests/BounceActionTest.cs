@@ -75,7 +75,6 @@ namespace BloodBowlTest.ActionTests
 
             Assert.IsTrue(FieldCoordinate.AreEqual(expectedCoord, oobAction.Coordinate));
             Assert.IsTrue(FieldCoordinate.AreEqual(expectedLastIB, oobAction.LastInboundSquare));
-
         }
     }
 }
