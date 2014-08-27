@@ -134,7 +134,7 @@ namespace BloodBowlTest
 
     //        FieldCoordinate from = new FieldCoordinate(3, 1);
     //        FieldCoordinate to = new FieldCoordinate(4, -4);
-    //        FieldCoordinate expectedResult = new FieldCoordinate(3, 0);
+    //        FieldCoordinate expectedResult = new FieldCoordinate(5, 1);
 
     //        FieldCoordinate result = theBoard.GetLastInboundOnPath(from, to);
 
@@ -149,7 +149,7 @@ namespace BloodBowlTest
 
     //        FieldCoordinate from = new FieldCoordinate(0, 0);
     //        FieldCoordinate to = new FieldCoordinate(10, -2);
-    //        FieldCoordinate expectedResult = new FieldCoordinate(5, 0);
+    //        FieldCoordinate expectedResult = new FieldCoordinate(2, 0);
 
     //        FieldCoordinate result = theBoard.GetLastInboundOnPath(from, to);
 

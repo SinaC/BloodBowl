@@ -81,16 +81,6 @@
     <ExpectedY>0</ExpectedY>
   </Row>
   <Row>
-    <Width>6</Width>
-    <Height>6</Height>
-    <fromX>2</fromX>
-    <fromY>3</fromY>
-    <ToX>6</ToX>
-    <ToY>0</ToY>
-    <ExpectedX>5</ExpectedX>
-    <ExpectedY>0</ExpectedY>
-  </Row>
-  <Row>
     <Width>4</Width>
     <Height>4</Height>
     <fromX>3</fromX>
@@ -113,11 +103,21 @@
   <Row>
     <Width>6</Width>
     <Height>6</Height>
+    <fromX>2</fromX>
+    <fromY>3</fromY>
+    <ToX>6</ToX>
+    <ToY>0</ToY>
+    <ExpectedX>5</ExpectedX>
+    <ExpectedY>1</ExpectedY>
+  </Row>
+  <Row>
+    <Width>6</Width>
+    <Height>6</Height>
     <fromX>0</fromX>
     <fromY>0</fromY>
     <ToX>10</ToX>
     <ToY>-2</ToY>
-    <ExpectedX>5</ExpectedX>
+    <ExpectedX>2</ExpectedX>
     <ExpectedY>0</ExpectedY>
   </Row>
 </Rows>

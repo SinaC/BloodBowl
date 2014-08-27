@@ -8,29 +8,37 @@ namespace BloodBowlPOC.Boards
     public class Board : IBoard
     {
         //Upper Left is 0,0                N, NE,  E, SE,  S, SW,  W, NW
-        public static int[] DirectionsX = { 0, 1, 1, 1, 0, -1, -1, -1 };
-        public static int[] DirectionsY = { -1, -1, 0, 1, 1, 1, 0, -1 };
+        public static int[] DirectionsX = {0, 1, 1, 1, 0, -1, -1, -1};
+        public static int[] DirectionsY = {-1, -1, 0, 1, 1, 1, 0, -1};
 
-        public static readonly  FieldCoordinate[] NorthThrowIn = { //From Down to Up
-                                                           new FieldCoordinate(-1, -1),
-                                                           new FieldCoordinate(0,-1),
-                                                           new FieldCoordinate(1,1)
-                                                       };
-        public static readonly FieldCoordinate[] SouthThrowIn = { //From Up to Down
-                                                           new FieldCoordinate(1,1),
-                                                           new FieldCoordinate(0,1),
-                                                           new FieldCoordinate(-1,1)
-                                                       };
-        public static readonly FieldCoordinate[] EastThrowIn = {  //To West
-                                                           new FieldCoordinate(-1,1),
-                                                           new FieldCoordinate(-1,0),
-                                                           new FieldCoordinate(-1,-1)
-                                                       };
-        public static readonly FieldCoordinate[] WestThrowIn = { //To East
-                                                           new FieldCoordinate(1,-1),
-                                                           new FieldCoordinate(1,0),
-                                                           new FieldCoordinate(1,1)
-                                                       };
+        public static readonly FieldCoordinate[] NorthThrowIn =
+            {
+                //From Down to Up
+                new FieldCoordinate(-1, -1),
+                new FieldCoordinate(0, -1),
+                new FieldCoordinate(1, 1)
+            };
+        public static readonly FieldCoordinate[] SouthThrowIn =
+            {
+                //From Up to Down
+                new FieldCoordinate(1, 1),
+                new FieldCoordinate(0, 1),
+                new FieldCoordinate(-1, 1)
+            };
+        public static readonly FieldCoordinate[] EastThrowIn =
+            {
+                //To West
+                new FieldCoordinate(-1, 1),
+                new FieldCoordinate(-1, 0),
+                new FieldCoordinate(-1, -1)
+            };
+        public static readonly FieldCoordinate[] WestThrowIn =
+            {
+                //To East
+                new FieldCoordinate(1, -1),
+                new FieldCoordinate(1, 0),
+                new FieldCoordinate(1, 1)
+            };
 
         public int SizeX { get; private set; }
         public int SizeY { get; private set; }
@@ -56,25 +64,28 @@ namespace BloodBowlPOC.Boards
         {
             ActionBase startAction;
             // Throw the ball
-            switch (selectedAction) {
+            switch (selectedAction)
+            {
                 case "Pass":
-                    startAction = new BounceAction {
-                        Coordinate = point,
-                        LastKnownInBound = point,
-                        BounceLeft = maxBounces,
-                    };
+                    startAction = new BounceAction
+                        {
+                            Coordinate = point,
+                            LastKnownInBound = point,
+                            BounceLeft = maxBounces,
+                        };
                     break;
                 case "KickOff":
-                    startAction = new KickOffAction {
-                        Target = point
-                        //                LastKnownInBound = point,
-                        //              BounceLeft = maxBounces,
-                    };
+                    startAction = new KickOffAction
+                        {
+                            Target = point
+                            //                LastKnownInBound = point,
+                            //              BounceLeft = maxBounces,
+                        };
                     break;
                 default:
-                    throw new ArgumentException(@"Mode selected didn't make sense", "selectedAction"); 
+                    throw new ArgumentException(@"Mode selected didn't make sense", "selectedAction");
             }
-            
+
             Queue<ActionBase> actions = new Queue<ActionBase>();
             actions.Enqueue(startAction);
 
@@ -93,34 +104,39 @@ namespace BloodBowlPOC.Boards
 
         public FieldCoordinate[] GetThrowinRuler(FieldCoordinate coordinate)
         {
-            if(coordinate.X<0)
+            if (coordinate.X < 0)
                 return WestThrowIn;
-           if (coordinate.X >= SizeX)
+            if (coordinate.X >= SizeX)
                 return EastThrowIn;
             if (coordinate.Y < 0) //the Above 2 prioritize the sieline
                 return NorthThrowIn;
             if (coordinate.Y >= SizeY)
                 return SouthThrowIn;
 
-            throw new ArgumentException(@"Coordinate didn't make sense.","coordinate");
+            throw new ArgumentException(@"Coordinate didn't make sense.", "coordinate");
         }
 
         //TODO: make a boardUtility class of some sort maybe?
-        public bool IsInbound(FieldCoordinate theSquare){
-            return theSquare.X >= 0 
-                && theSquare.Y >= 0 
-                && theSquare.X < SizeX 
-                && theSquare.Y < SizeY;
+        public bool IsInbound(FieldCoordinate theSquare)
+        {
+            return theSquare.X >= 0
+                   && theSquare.Y >= 0
+                   && theSquare.X < SizeX
+                   && theSquare.Y < SizeY;
         }
 
         public FieldCoordinate GetLastInboundOnPath(FieldCoordinate theOrigin, FieldCoordinate theTarget)
         {
-            if (theOrigin.X == theTarget.X) { // Vertical
-                return new FieldCoordinate(theOrigin.X, Math.Max(0,Math.Min(theTarget.Y, SizeY-1)));
+            if (theOrigin.X == theTarget.X)
+            {
+                // Vertical
+                return new FieldCoordinate(theOrigin.X, Math.Max(0, Math.Min(theTarget.Y, SizeY - 1)));
             }
 
-            if (theOrigin.Y == theTarget.Y) { // Horizontal
-                return new FieldCoordinate(Math.Max(0, Math.Min(theTarget.X, SizeX-1)), theOrigin.Y);
+            if (theOrigin.Y == theTarget.Y)
+            {
+                // Horizontal
+                return new FieldCoordinate(Math.Max(0, Math.Min(theTarget.X, SizeX - 1)), theOrigin.Y);
             }
 
             // ca a l'air mieux mais j'ai qd meme pu ecrire un unit test qui passe pas.
@@ -136,13 +152,14 @@ namespace BloodBowlPOC.Boards
 
             if (Math.Abs(theTarget.X - borderX) > Math.Abs(theTarget.Y - borderY)) // On sort en x ou y ?
             {
-                double slope = (double)(theTarget.Y - theOrigin.Y) / (theTarget.X - theOrigin.X);
+                double slope = (double) (theTarget.Y - theOrigin.Y)/(theTarget.X - theOrigin.X);
                 inBoundX = borderX;
-                inBoundY = (int)(theOrigin.Y + slope * (borderX - theOrigin.X));
+                inBoundY = (int) (theOrigin.Y + slope*(borderX-0.5 - theOrigin.X));
             }
-            else {
-                double slope = (double)(theTarget.X - theOrigin.X) / (theTarget.Y - theOrigin.Y);
-                inBoundX = (int)(theOrigin.X + slope * (borderY - theOrigin.Y));
+            else
+            {
+                double slope = (double) (theTarget.X - theOrigin.X)/(theTarget.Y - theOrigin.Y);
+                inBoundX = (int) (theOrigin.X + slope*(borderY-0.5 - theOrigin.Y));
                 inBoundY = borderY;
             }
 
@@ -180,6 +197,102 @@ namespace BloodBowlPOC.Boards
             //    );
 
             //return unFlipped;
+        }
+
+        private static int Clamp(int value, int min, int max)
+        {
+            return Math.Min(Math.Max(min, value), max);
+        }
+
+        public FieldCoordinate GetLastInboundOnPath_Bresenham(FieldCoordinate origin, FieldCoordinate target)
+        {
+            if (origin.X == target.X) // Vertical
+                return new FieldCoordinate(origin.X, Clamp(target.Y, 0, SizeY - 1));
+
+            if (origin.Y == target.Y) // Horizontal
+                return new FieldCoordinate(Clamp(target.X, 0, SizeX - 1), origin.Y);
+
+            int borderX = Clamp(target.X, 0, SizeX - 1);
+            int borderY = Clamp(target.Y, 0, SizeY - 1);
+
+            if (borderX == target.X && borderY == target.Y) // on sort pas -> pas de calcul
+                return target;
+
+            // Bresenham, stop when reaching borders
+            int w = target.X - origin.X;
+            int h = target.Y - origin.Y;
+            int dx1 = 0, dy1 = 0, dx2 = 0, dy2 = 0;
+            if (w < 0)
+                dx1 = -1;
+            else if (w > 0)
+                dx1 = 1;
+            if (h < 0)
+                dy1 = -1;
+            else if (h > 0)
+                dy1 = 1;
+            if (w < 0)
+                dx2 = -1;
+            else if (w > 0)
+                dx2 = 1;
+            int longest = Math.Abs(w);
+            int shortest = Math.Abs(h);
+            if (longest <= shortest)
+            {
+                longest = Math.Abs(h);
+                shortest = Math.Abs(w);
+                if (h < 0)
+                    dy2 = -1;
+                else if (h > 0)
+                    dy2 = 1;
+                dx2 = 0;
+            }
+            int x = origin.X;
+            int y = origin.Y;
+            int previousX = x;
+            int previousY = y;
+            int numerator = longest / 2;
+            for (int i = 0; i <= longest; i++)
+            {
+                if (x < 0 || x >= SizeX || y < 0 || y >= SizeY)
+                    break;
+                previousX = x;
+                previousY = y;
+                numerator += shortest;
+                if (numerator >= longest)
+                {
+                    numerator -= longest;
+                    x += dx1;
+                    y += dy1;
+                }
+                else
+                {
+                    x += dx2;
+                    y += dy2;
+                }
+            }
+            return new FieldCoordinate(previousX, previousY);
+        }
+
+        public FieldCoordinate GetLastInboundOnPath_Test(FieldCoordinate origin, FieldCoordinate target)
+        {
+            if (origin.X == target.X) // Vertical
+                return new FieldCoordinate(origin.X, Clamp(target.Y, 0, SizeY - 1));
+
+            if (origin.Y == target.Y) // Horizontal
+                return new FieldCoordinate(Clamp(target.X, 0, SizeX - 1), origin.Y);
+
+            int borderX = Clamp(target.X, 0, SizeX - 1);
+            int borderY = Clamp(target.Y, 0, SizeY - 1);
+
+            if (borderX == target.X && borderY == target.Y) // on sort pas -> pas de calcul
+                return target;
+
+            double slopeYX = (target.Y - origin.Y) / (double)(target.X - origin.X);
+            double slopeXY = (target.X - origin.X) / (double)(target.Y - origin.Y);
+            double horizontal = slopeXY * (borderY - 0.5 + origin.Y);
+            double vertical = slopeYX * (borderX - 0.5 + origin.X);
+
+            return default(FieldCoordinate);
         }
     }
 }

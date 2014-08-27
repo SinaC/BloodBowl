@@ -31,6 +31,9 @@ namespace BloodBowlPOC.ViewModels
             BounceOptionsViewModel = new BounceOptionsViewModel();
 
             Mediator.Register<CellSelectedMessage>(this, OnCellSelected);
+
+            //Board b1 = new Board(6, 6);
+            //FieldCoordinate result = b1.GetLastInboundOnPath_Test(new FieldCoordinate(0, 0), new FieldCoordinate(10, -1));
         }
 
         public void Initialize()
