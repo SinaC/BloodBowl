@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using BloodBowlPOC.Actions;
 using BloodBowlPOC.Utils;
+using BloodBowlPOC.ViewModels;
 
 namespace BloodBowlPOC.Boards
 {
@@ -60,13 +61,13 @@ namespace BloodBowlPOC.Boards
                     Probabilities[x, y] = 0;
         }
 
-        public void ComputeBounceProbabilities(FieldCoordinate point, int maxBounces, string selectedAction)
+        public void ComputeBounceProbabilities(FieldCoordinate point, int maxBounces, SelectableActions mode)
         {
             ActionBase startAction;
             // Throw the ball
-            switch (selectedAction)
+            switch (mode)
             {
-                case "Pass":
+                case SelectableActions.Pass:
                     startAction = new BounceAction
                         {
                             Coordinate = point,
@@ -74,7 +75,7 @@ namespace BloodBowlPOC.Boards
                             BounceLeft = maxBounces,
                         };
                     break;
-                case "KickOff":
+                case SelectableActions.KickOff:
                     startAction = new KickOffAction
                         {
                             Target = point
@@ -83,7 +84,7 @@ namespace BloodBowlPOC.Boards
                         };
                     break;
                 default:
-                    throw new ArgumentException(@"Mode selected didn't make sense", "selectedAction");
+                    throw new ArgumentException(@"Mode selected didn't make sense", "mode");
             }
 
             Queue<ActionBase> actions = new Queue<ActionBase>();

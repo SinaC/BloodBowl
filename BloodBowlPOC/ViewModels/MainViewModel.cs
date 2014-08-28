@@ -33,7 +33,7 @@ namespace BloodBowlPOC.ViewModels
             Mediator.Register<CellSelectedMessage>(this, OnCellSelected);
 
             //Board b1 = new Board(6, 6);
-            //FieldCoordinate result = b1.GetLastInboundOnPath_Test(new FieldCoordinate(0, 0), new FieldCoordinate(10, -1));
+            //FieldCoordinate result = b1.GetLastInboundOnPath_CohenSutherland(new FieldCoordinate(0, 0), new FieldCoordinate(10, -1));
         }
 
         public void Initialize()
@@ -45,10 +45,10 @@ namespace BloodBowlPOC.ViewModels
         private void OnCellSelected(CellSelectedMessage cellSelectedMessage)
         {
             int maxBounces = BounceOptionsViewModel.SelectedBounceCount;
-            var radioChecked = BounceOptionsViewModel.SelectedMode.ToString(); // TODO: should use enum instead of string
+            var selectedMode = BounceOptionsViewModel.SelectedMode;
 
             Board.Reset();
-            Board.ComputeBounceProbabilities(new FieldCoordinate(cellSelectedMessage.X, cellSelectedMessage.Y), maxBounces, radioChecked);
+            Board.ComputeBounceProbabilities(new FieldCoordinate(cellSelectedMessage.X, cellSelectedMessage.Y), maxBounces, selectedMode);
 
             DisplayProbabilities(Board);
         }

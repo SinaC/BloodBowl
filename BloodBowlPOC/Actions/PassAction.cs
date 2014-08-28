@@ -15,8 +15,8 @@ namespace BloodBowlPOC.Actions
             double accurateProba = GetAccuracy();
 
             subActions.Add(new BounceAction { 
-                Coordinate = Target, 
-                LastKnownInBound = board.GetLastInboundOnPath(Origin,Target),
+                Coordinate = Target,
+                LastKnownInBound = board.GetLastInboundOnPath_Bresenham(Origin, Target),
                 BounceLeft = 3, 
                 Probability = 1-accurateProba 
             });

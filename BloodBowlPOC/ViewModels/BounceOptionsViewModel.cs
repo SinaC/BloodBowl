@@ -2,7 +2,7 @@
 
 namespace BloodBowlPOC.ViewModels
 {
-    public enum Modes
+    public enum SelectableActions
     {
         Pass,
         KickOff,
@@ -34,8 +34,8 @@ namespace BloodBowlPOC.ViewModels
             }
         }
 
-        private Modes _selectedMode;
-        public Modes SelectedMode
+        private SelectableActions _selectedMode;
+        public SelectableActions SelectedMode
         {
             get { return _selectedMode; }
             set { Set(() => SelectedMode, ref _selectedMode, value); }
@@ -44,7 +44,7 @@ namespace BloodBowlPOC.ViewModels
         public BounceOptionsViewModel()
         {
             SelectedBounceCount = BounceCountList[2];
-            SelectedMode = Modes.Pass;
+            SelectedMode = SelectableActions.Pass;
         }
     }
 
@@ -53,7 +53,7 @@ namespace BloodBowlPOC.ViewModels
         public BounceOptionsViewModelDesignData()
         {
             SelectedBounceCount = BounceCountList[3];
-            SelectedMode = Modes.KickOff;
+            SelectedMode = SelectableActions.KickOff;
         }
     }
 }

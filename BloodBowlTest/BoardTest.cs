@@ -47,7 +47,7 @@ namespace BloodBowlTest
         {
             Board theBoard = new Board(width, height);
 
-            return theBoard.GetLastInboundOnPath_Bresenham(from, to);
+            return theBoard.GetLastInboundOnPath_CohenSutherland(from, to);
         }
 
         

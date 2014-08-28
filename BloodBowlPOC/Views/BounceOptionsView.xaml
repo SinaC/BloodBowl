@@ -25,11 +25,11 @@
                       ItemsSource="{Binding BounceCountList}"/>
         </StackPanel>
         <RadioButton Grid.Column="1" GroupName="Mode" Margin="20,0,0,0"
-                     IsChecked="{Binding SelectedMode, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static viewModels:Modes.Pass}}">
+                     IsChecked="{Binding SelectedMode, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static viewModels:SelectableActions.Pass}}">
             <TextBlock Text="Pass"/>
         </RadioButton>
         <RadioButton Grid.Column="2" GroupName="Mode" Margin="10,0,0,0"
-                     IsChecked="{Binding SelectedMode, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static viewModels:Modes.KickOff}}">
+                     IsChecked="{Binding SelectedMode, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static viewModels:SelectableActions.KickOff}}">
             <TextBlock Text="KickOff"/>
         </RadioButton>
     </Grid>
