@@ -39,7 +39,7 @@ namespace BloodBowlTest
             var result = DoCall(width, height, from, to);
 
             Assert.IsTrue(FieldCoordinate.AreEqual(expected, result), 
-                String.Format("Expected {0}, got {1}", expected, result));
+                String.Format("From {0} To {1}. Expected {2}, got {3}", from, to, expected, result));
 
         }
 
@@ -47,7 +47,7 @@ namespace BloodBowlTest
         {
             Board theBoard = new Board(width, height);
 
-            return theBoard.GetLastInboundOnPath(from, to);
+            return theBoard.GetLastInboundOnPath_Bresenham(from, to);
         }
 
         

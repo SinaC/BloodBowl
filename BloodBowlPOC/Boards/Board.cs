@@ -273,6 +273,90 @@ namespace BloodBowlPOC.Boards
             return new FieldCoordinate(previousX, previousY);
         }
 
+        const int CodeBottom = 1; 
+        const int CodeTop    = 2;
+        const int CodeLeft   = 4; 
+        const int CodeRight  = 8;
+
+        public byte CompOutCode(int x, int y, int minX, int minY, int maxX, int maxY)
+        {
+            byte code = 0;
+            if (y > maxY)
+                code = CodeBottom;
+            else if (y < minX) 
+                code = CodeTop;
+            if (x > maxX) 
+                code += CodeRight;
+            else if (x < minX) 
+                code += CodeLeft;
+            return code;
+        }
+
+        public FieldCoordinate GetLastInboundOnPath_CohenSutherland(FieldCoordinate origin, FieldCoordinate target)
+        {
+            int minX = 0;
+            int minY = 0;
+            int maxX = SizeX-1;
+            int maxY = SizeY-1;
+
+            byte outCodeOrigin = CompOutCode(origin.X, origin.Y, minX, minY, maxX, maxY);
+            byte outCodeTarget = CompOutCode(target.X, target.Y, minX, minY, maxX, maxY);
+
+            int x1 = origin.X;
+            int y1 = origin.Y;
+            int x2 = target.X;
+            int y2 = target.Y;
+            
+            int x = 0, y = 0;
+            while (outCodeOrigin != 0 || outCodeTarget != 0) // While not Trivially Accepted
+            {
+                if ((outCodeOrigin & outCodeTarget) != 0) // Trivial Reject
+                    break;
+                // Failed both tests, so calculate the line segment to clip
+                byte outCodeOut;
+                if (outCodeOrigin > 0)
+                    outCodeOut = outCodeOrigin; // Clip origin
+                else
+                    outCodeOut = outCodeTarget; // Clip target
+
+                if ((outCodeOut & CodeBottom) == CodeBottom) // Clip the line to the bottom of viewport
+                {
+                    y = SizeY - 1;
+                    x = x1 + ((x2 - x1)*(y - y1))/(y2 - y1);
+                }
+                else if ((outCodeOut & CodeTop) == CodeTop) // Clip the line to the top of viewport
+                {
+                    y = 0;
+                    x = x1 + ((x2 - x1)*(y - y1))/(y2 - y1);
+                }
+                else if ((outCodeOut & CodeRight) == CodeRight) // Clip the line to the right of viewport
+                {
+                    x = SizeX - 1;
+                    y = y1 + ((y2 - y1)*(x - x1))/(x2 - x1);
+                }
+                else if ((outCodeOut & CodeLeft) == CodeLeft) // Clip the line to the left of viewport
+                {
+                    x = 0;
+                    y = y1 + ((y2 - y1)*(x - x1))/(x2 - x1);
+                }
+
+                if (outCodeOut == outCodeOrigin) // Modify origin coordinate
+                {
+                    x1 = x;
+                    y1 = y;
+                    outCodeOrigin = CompOutCode(x1, y1, minX, minY, maxX, maxY); // Recalculate outCode
+                }
+                else // Modify target coordinate
+                {
+                    x2 = x;
+                    y2 = y;
+                    outCodeTarget = CompOutCode(x2, y2, minX, minY, maxX, maxY); // Recalculate outCode
+                }
+            }
+
+            return new FieldCoordinate(x2, y2);
+        }
+
         public FieldCoordinate GetLastInboundOnPath_Test(FieldCoordinate origin, FieldCoordinate target)
         {
             if (origin.X == target.X) // Vertical
